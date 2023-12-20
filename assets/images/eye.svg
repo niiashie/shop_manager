@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="21" height="21" viewBox="0 0 21 21">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="shape" width="21" height="21" transform="translate(234 17)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="suffix-icon" transform="translate(-234 -17)" clip-path="url(#clip-path)">
+    <path id="icons8-eye" d="M11.455,3.818c-7.636,0-10.5,7.636-10.5,7.636s2.864,7.636,10.5,7.636,10.5-7.636,10.5-7.636S19.091,3.818,11.455,3.818Zm0,2.864a4.773,4.773,0,1,1-4.773,4.773A4.773,4.773,0,0,1,11.455,6.682Zm0,1.909a2.864,2.864,0,1,0,2.864,2.864,2.864,2.864,0,0,0-2.864-2.864Z" transform="translate(233.045 16.045)" fill="#666"/>
+  </g>
+</svg>
