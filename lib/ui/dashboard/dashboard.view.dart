@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shop_manager/constants/assets.dart';
 import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
 import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
+import 'package:shop_manager/ui/home/home.view.dart';
+import 'package:shop_manager/ui/products/product.view.dart';
+import 'package:shop_manager/ui/profile/profile.view.dart';
+import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/side_menu_item.dart';
+import 'package:shop_manager/ui/shop/shop.view.dart';
+import 'package:shop_manager/ui/stock/stock.view.dart';
+import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class DashBoardView extends StackedView<DashboardViewModel> {
@@ -106,6 +114,85 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                               onHover: (a) {})
                         ],
                       )),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20, top: 10),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.calendar_month,
+                          size: 10,
+                          color: AppColors.crudTextColor,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          DateFormat.yMMMd().format(DateTime.now()),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Icon(
+                          Icons.person,
+                          size: 10,
+                          color: AppColors.crudTextColor,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          "Emmanuel Ashie",
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Material(
+                          elevation: 2,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                          color: Colors.transparent,
+                          child: InkWell(
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primaryColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.logout,
+                                  size: 12,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              debugPrint("Logging out");
+                            },
+                          ),
+                        )
+                        // CustomButton(
+                        //   width: 100,
+                        //   height: 30,
+                        //   elevation: 2,
+                        //   color: AppColors.primaryColor,
+                        //   title: const Text(
+                        //     "Logout",
+                        //     style: TextStyle(color: Colors.white),
+                        //   ),
+                        //   ontap: () {
+                        //     debugPrint("Logging out");
+                        //   },
+                        // )
+                      ],
+                    ),
+                  ),
                 )
               ],
             ),
@@ -113,51 +200,41 @@ class DashBoardView extends StackedView<DashboardViewModel> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            margin: const EdgeInsets.only(left: 250, top: 50),
+            margin: const EdgeInsets.only(
+                left: 250, top: 50, right: 20, bottom: 20),
+            padding: const EdgeInsets.all(15),
             decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  // bottomLeft: Radius.circular(20),
-                )),
+                borderRadius: BorderRadius.all(Radius.circular(15))),
             child: Navigator(
-                      key: Utils.sideMenuNavigationKey,
-                      initialRoute: '/',
-                      onGenerateRoute: ((settings) {
-                        Widget page;
-                        switch (settings.name) {
-                          case '/':
-                            page = HomeView(
-                              totalBooks: totalBooks,
-                              purchasedBooks: booksBought,
-                              totalPosts: totalPosts,
-                            );
-                            break;
-                          case '/books':
-                            page = const MyBookView();
-                            break;
-                          case '/orders':
-                            page = const OrdersView();
-                            break;
-                          case '/account':
-                            page = const AccountView();
-                            break;
-                          case '/posts':
-                            page = const ChurchPostView();
-                          default:
-                            page = HomeView(
-                              totalBooks: totalBooks,
-                              purchasedBooks: booksBought,
-                              totalPosts: totalPosts,
-                            );
-                            break;
-                        }
-                        return PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    page,
-                            transitionDuration: const Duration(seconds: 0));
-                      })),,    
+                key: Utils.sideMenuNavigationKey,
+                initialRoute: '/',
+                onGenerateRoute: ((settings) {
+                  Widget page;
+                  switch (settings.name) {
+                    case '/':
+                      page = const HomeView();
+                      break;
+                    case '/product':
+                      page = const ProductView();
+                      break;
+                    case '/profile':
+                      page = const ProfileView();
+                      break;
+                    case '/shop':
+                      page = const ShopView();
+                      break;
+                    case '/stocks':
+                      page = const StockView();
+                    default:
+                      page = const HomeView();
+                      break;
+                  }
+                  return PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          page,
+                      transitionDuration: const Duration(seconds: 0));
+                })),
           )
         ],
       ),

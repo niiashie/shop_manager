@@ -12,4 +12,12 @@ class Utils {
     );
     return formatCurrency.format(amount);
   }
+
+  bool isNumeric(String entry) {
+    if (double.tryParse(entry) != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

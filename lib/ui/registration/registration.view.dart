@@ -67,7 +67,7 @@ class RegistrationView extends StackedView<RegistrationViewModel> {
                   ),
                   SizedBox(
                     width: 500,
-                    height: 600,
+                    height: 800,
                     child: Stack(
                       children: [
                         Align(
@@ -80,7 +80,8 @@ class RegistrationView extends StackedView<RegistrationViewModel> {
                                     const BorderRadius.all(Radius.circular(15)),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 490,
+                                  padding: const EdgeInsets.only(
+                                      top: 15, bottom: 15),
                                   decoration: const BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.all(
@@ -104,77 +105,145 @@ class RegistrationView extends StackedView<RegistrationViewModel> {
                                       const SizedBox(
                                         height: 15,
                                       ),
-                                      SizedBox(
-                                        width: 300,
-                                        child: CustomFormField(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          controller: viewModel.pinController,
-                                          hintText: "Enter your Name",
-                                          labelText: "Name",
-                                          prefixIcon: Icon(
-                                            Icons.badge_outlined,
-                                            color: Colors.grey[400]!,
-                                            size: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      SizedBox(
-                                        width: 300,
-                                        child: CustomFormField(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          controller: viewModel.pinController,
-                                          hintText: "Enter your PIN",
-                                          labelText: "PIN",
-                                          prefixIcon: Icon(
-                                            Icons.badge_outlined,
-                                            color: Colors.grey[400]!,
-                                            size: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      SizedBox(
-                                        width: 300,
-                                        child: CustomFormField(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          controller:
-                                              viewModel.passwordController,
-                                          hintText: "Enter your password",
-                                          labelText: "Password",
-                                          isPasswordField: true,
-                                          prefixIcon: Icon(
-                                            Icons.lock_outline,
-                                            color: Colors.grey[400]!,
-                                            size: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      SizedBox(
-                                        width: 300,
-                                        child: CustomFormField(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          controller:
-                                              viewModel.passwordController,
-                                          hintText: "Enter your password",
-                                          labelText: "Password",
-                                          isPasswordField: true,
-                                          prefixIcon: Icon(
-                                            Icons.lock_outline,
-                                            color: Colors.grey[400]!,
-                                            size: 15,
-                                          ),
+                                      Form(
+                                        key: viewModel.registrationFormKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SizedBox(
+                                              width: 300,
+                                              child: CustomFormField(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                controller:
+                                                    viewModel.nameController,
+                                                hintText: "Enter your Name",
+                                                labelText: "Name",
+                                                validator: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return "Name required";
+                                                  }
+
+                                                  return null;
+                                                },
+                                                prefixIcon: Icon(
+                                                  Icons.badge_outlined,
+                                                  color: Colors.grey[400]!,
+                                                  size: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            SizedBox(
+                                              width: 300,
+                                              child: CustomFormField(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                controller:
+                                                    viewModel.phoneController,
+                                                hintText:
+                                                    "Enter Your Phone Number",
+                                                labelText: "Phone Number",
+                                                validator: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return "Phone number required";
+                                                  }
+
+                                                  return null;
+                                                },
+                                                prefixIcon: Icon(
+                                                  Icons.badge_outlined,
+                                                  color: Colors.grey[400]!,
+                                                  size: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            SizedBox(
+                                              width: 300,
+                                              child: CustomFormField(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                controller:
+                                                    viewModel.pinController,
+                                                hintText: "Enter your PIN",
+                                                labelText: "PIN",
+                                                validator: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return "PIN required";
+                                                  } else if (value.length < 4) {
+                                                    return "PIN should be at lease 4 digits";
+                                                  }
+
+                                                  return null;
+                                                },
+                                                prefixIcon: Icon(
+                                                  Icons.badge_outlined,
+                                                  color: Colors.grey[400]!,
+                                                  size: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            SizedBox(
+                                              width: 300,
+                                              child: CustomFormField(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                controller: viewModel
+                                                    .passwordController,
+                                                hintText: "Enter your password",
+                                                labelText: "Password",
+                                                isPasswordField: true,
+                                                validator: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return "Password required";
+                                                  }
+
+                                                  return null;
+                                                },
+                                                prefixIcon: Icon(
+                                                  Icons.lock_outline,
+                                                  color: Colors.grey[400]!,
+                                                  size: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            SizedBox(
+                                              width: 300,
+                                              child: CustomFormField(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                controller: viewModel
+                                                    .confirmPasswordController,
+                                                hintText:
+                                                    "Confirm your password",
+                                                labelText: "Confirm Password",
+                                                isPasswordField: true,
+                                                validator: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return "Password confirmation required";
+                                                  }
+
+                                                  return null;
+                                                },
+                                                prefixIcon: Icon(
+                                                  Icons.lock_outline,
+                                                  color: Colors.grey[400]!,
+                                                  size: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       const SizedBox(
@@ -184,13 +253,14 @@ class RegistrationView extends StackedView<RegistrationViewModel> {
                                         width: 150,
                                         height: 40,
                                         elevation: 2,
+                                        isLoading: viewModel.isLoading,
                                         color: AppColors.primaryColor,
                                         title: const Text(
                                           "Create Account",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         ontap: () {
-                                          debugPrint("creating account");
+                                          viewModel.register();
                                         },
                                       ),
                                       const SizedBox(

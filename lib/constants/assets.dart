@@ -4,4 +4,7 @@ class AppImages {
   static const stockGrowth = 'assets/images/growth.png';
   static const eye = "assets/images/eye.svg";
   static const eyeSlash = "assets/images/eye_slash.svg";
+  static const successAnim = "assets/animation/success.json";
+  static const errorAnim = "assets/animation/error.json";
+  static const warningAnim = "assets/animation/warning.json";
 }

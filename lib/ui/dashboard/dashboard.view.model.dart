@@ -1,3 +1,4 @@
+import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class DashboardViewModel extends BaseViewModel {
@@ -11,14 +12,21 @@ class DashboardViewModel extends BaseViewModel {
     unselectAll();
     if (type == "home") {
       homeSelected = true;
+      Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/");
     } else if (type == "shop") {
       shopSelceted = true;
+      Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/shop");
     } else if (type == "products") {
       productSelected = true;
+      Utils.sideMenuNavigationKey.currentState
+          ?.pushReplacementNamed("/product");
     } else if (type == "stocks") {
       stockSelected = true;
+      Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/stocks");
     } else if (type == "profile") {
       profileSelected = true;
+      Utils.sideMenuNavigationKey.currentState
+          ?.pushReplacementNamed("/profile");
     }
     rebuildUi();
   }

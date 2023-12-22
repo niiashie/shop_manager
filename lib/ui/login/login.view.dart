@@ -68,7 +68,7 @@ class LoginScreen extends StackedView<LoginViewModel> {
                   ),
                   SizedBox(
                     width: 500,
-                    height: 430,
+                    height: 520,
                     child: Stack(
                       children: [
                         Align(
@@ -81,7 +81,8 @@ class LoginScreen extends StackedView<LoginViewModel> {
                                     const BorderRadius.all(Radius.circular(15)),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 370,
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
                                   decoration: const BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.all(
@@ -105,39 +106,62 @@ class LoginScreen extends StackedView<LoginViewModel> {
                                       const SizedBox(
                                         height: 15,
                                       ),
-                                      SizedBox(
-                                        width: 300,
-                                        child: CustomFormField(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          controller: viewModel.pinController,
-                                          hintText: "Enter your PIN",
-                                          labelText: "PIN",
-                                          prefixIcon: Icon(
-                                            Icons.badge_outlined,
-                                            color: Colors.grey[400]!,
-                                            size: 15,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      SizedBox(
-                                        width: 300,
-                                        child: CustomFormField(
-                                          fillColor: Colors.white,
-                                          filled: true,
-                                          controller:
-                                              viewModel.passwordController,
-                                          hintText: "Enter your password",
-                                          labelText: "Password",
-                                          isPasswordField: true,
-                                          prefixIcon: Icon(
-                                            Icons.lock_outline,
-                                            color: Colors.grey[400]!,
-                                            size: 15,
-                                          ),
+                                      Form(
+                                        key: viewModel.loginFormKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            SizedBox(
+                                              width: 300,
+                                              child: CustomFormField(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                controller:
+                                                    viewModel.pinController,
+                                                hintText: "Enter your PIN",
+                                                labelText: "PIN",
+                                                validator: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return "PIN required";
+                                                  }
+
+                                                  return null;
+                                                },
+                                                prefixIcon: Icon(
+                                                  Icons.badge_outlined,
+                                                  color: Colors.grey[400]!,
+                                                  size: 15,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            SizedBox(
+                                              width: 300,
+                                              child: CustomFormField(
+                                                fillColor: Colors.white,
+                                                filled: true,
+                                                controller: viewModel
+                                                    .passwordController,
+                                                hintText: "Enter your password",
+                                                labelText: "Password",
+                                                validator: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return "Password required";
+                                                  }
+
+                                                  return null;
+                                                },
+                                                isPasswordField: true,
+                                                prefixIcon: Icon(
+                                                  Icons.lock_outline,
+                                                  color: Colors.grey[400]!,
+                                                  size: 15,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       const SizedBox(
@@ -148,14 +172,13 @@ class LoginScreen extends StackedView<LoginViewModel> {
                                         height: 40,
                                         elevation: 2,
                                         color: AppColors.primaryColor,
+                                        isLoading: viewModel.isLoading,
                                         title: const Text(
                                           "Sign In",
                                           style: TextStyle(color: Colors.white),
                                         ),
                                         ontap: () {
-                                          Navigator.of(context)
-                                              .pushReplacementNamed(
-                                                  Routes.dashboard);
+                                          viewModel.login();
                                         },
                                       ),
                                       const SizedBox(
