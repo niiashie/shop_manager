@@ -1,15 +1,115 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shop_manager/api/product_api.dart';
+import 'package:shop_manager/app/locator.dart';
+import 'package:shop_manager/models/api_response.dart';
+import 'package:shop_manager/models/product.dart';
+import 'package:shop_manager/services/app_service.dart';
+import 'package:shop_manager/services/dialog.service.dart';
+import 'package:shop_manager/ui/products/widgets/product_update.view.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart' as pw;
 
 class ProductViewModel extends BaseViewModel {
-  bool showAddProduct = false;
-  TextEditingController? name, costPrice, sellingPrice, quantity;
+  bool showAddProduct = false, isLoading = false, productsLoading = false;
+  TextEditingController? name, costPrice, sellingPrice;
+  final GlobalKey<FormState> productAdditionFormKey = GlobalKey<FormState>();
+  List<Product> products = [];
+  var appService = locator<AppService>();
+  ProductApi productApi = ProductApi();
+  int currentPage = 1, totalPages = 1;
 
   init() {
     name = TextEditingController(text: "");
     costPrice = TextEditingController(text: "");
     sellingPrice = TextEditingController(text: "");
-    quantity = TextEditingController(text: "");
+    getProducts(1);
+  }
+
+  getProducts(int page) async {
+    products.clear();
+    try {
+      productsLoading = true;
+      rebuildUi();
+      ApiResponse getProductResponse = await productApi.getProducts(page: page);
+      if (getProductResponse.ok) {
+        List<dynamic> data = getProductResponse.data;
+        totalPages = getProductResponse.body['last_page'];
+
+        for (var obj in data) {
+          products.add(Product.fromJson(obj));
+        }
+        productsLoading = false;
+        rebuildUi();
+      }
+    } on DioException catch (e) {
+      ApiResponse errorResponse = ApiResponse.parse(e.response);
+      debugPrint(errorResponse.message);
+      appService.showErrorFromApiRequest(message: errorResponse.message!);
+    }
+  }
+
+  changePage(a) {
+    currentPage = a;
+    getProducts(a);
+  }
+
+  editProduct(index) {
+    locator<DialogService>().show(
+        type: "custom",
+        title: "Success",
+        customWidget: ProductUpdate(
+          product: products[index],
+          onProductUpdated: (p) {
+            products[index] = p;
+            rebuildUi();
+          },
+        ));
+  }
+
+  addProductRequest() async {
+    if (productAdditionFormKey.currentState!.validate()) {
+      Map<String, dynamic> data = {
+        'name': name!.text,
+        'selling_price': sellingPrice!.text,
+        'cost_price': costPrice!.text,
+      };
+
+      try {
+        isLoading = true;
+        rebuildUi();
+
+        ApiResponse response = await productApi.addProduct(data);
+        if (response.ok) {
+          Map<String, dynamic> data = response.body;
+          locator<DialogService>().show(
+              type: "success",
+              title: "Success",
+              message: data['message'],
+              showCancelBtn: false,
+              onOkayTap: () {
+                Navigator.of(pw.StackedService.navigatorKey!.currentContext!)
+                    .pop();
+              });
+          resetValues();
+          products.insert(0, Product.fromJson(data['product']));
+          isLoading = false;
+          rebuildUi();
+        }
+      } on DioException catch (e) {
+        isLoading = false;
+        rebuildUi();
+        ApiResponse errorResponse = ApiResponse.parse(e.response);
+        debugPrint(errorResponse.message);
+        appService.showErrorFromApiRequest(message: errorResponse.message!);
+      }
+    }
+  }
+
+  resetValues() {
+    name!.text = "";
+    costPrice!.text = "";
+    sellingPrice!.text = "";
   }
 
   addProductTapped() {

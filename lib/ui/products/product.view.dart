@@ -4,6 +4,8 @@ import 'package:shop_manager/constants/fonts.dart';
 import 'package:shop_manager/ui/products/product.view.model.dart';
 import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/custom_form_field.dart';
+import 'package:shop_manager/ui/shared/pagination.dart';
+import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class ProductView extends StackedView<ProductViewModel> {
@@ -169,14 +171,135 @@ class ProductView extends StackedView<ProductViewModel> {
                                 Expanded(
                                   child: Center(
                                     child: Text(
-                                      "More Options",
+                                      "Edit",
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          Visibility(
+                              visible: viewModel.productsLoading,
+                              replacement: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ListView.builder(
+                                      itemCount: viewModel.products.length,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          width: double.infinity,
+                                          height: 40,
+                                          margin: const EdgeInsets.only(
+                                              left: 20, right: 20),
+                                          color: index % 2 == 0
+                                              ? Colors.white
+                                              : Colors.grey[100],
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Expanded(
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 15),
+                                                    child: Text(
+                                                      viewModel.products[index]
+                                                          .name!,
+                                                      style: const TextStyle(
+                                                          color: AppColors
+                                                              .crudTextColor),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    "GHS ${viewModel.products[index].costPrice}",
+                                                    style: const TextStyle(
+                                                        color: AppColors
+                                                            .crudTextColor),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    "GHS ${viewModel.products[index].sellingPrice}",
+                                                    style: const TextStyle(
+                                                        color: AppColors
+                                                            .crudTextColor),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Center(
+                                                    child: Material(
+                                                  elevation: 2,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(5)),
+                                                  child: InkWell(
+                                                    child: Container(
+                                                      width: 30,
+                                                      height: 30,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: AppColors
+                                                            .primaryColor,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    5)),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Icon(
+                                                          Icons.edit,
+                                                          size: 12,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      viewModel
+                                                          .editProduct(index);
+                                                    },
+                                                  ),
+                                                )),
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                  const SizedBox(height: 20),
+                                  PaginationWidget(
+                                    currentPage: viewModel.currentPage,
+                                    totalPages: viewModel.totalPages,
+                                    onPageChanged: (a) {
+                                      viewModel.changePage(a);
+                                    },
+                                  )
+                                ],
+                              ),
+                              child: Container(
+                                margin: const EdgeInsets.only(top: 20),
+                                width: double.infinity,
+                                height: 40,
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.primaryColor,
+                                    strokeWidth: 1,
+                                  ),
+                                ),
+                              ))
                         ],
                       ),
                       child: Container(
@@ -197,66 +320,87 @@ class ProductView extends StackedView<ProductViewModel> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2, bottom: 2),
-                              child: CustomFormField(
-                                controller: viewModel.name,
-                                filled: true,
-                                fillColor: Colors.white,
-                                label: "Name",
-                                hintText: "Please enter name of product",
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2, bottom: 2),
-                              child: CustomFormField(
-                                controller: viewModel.sellingPrice,
-                                filled: true,
-                                fillColor: Colors.white,
-                                prefixIcon: const Text(
-                                  "GHS",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                label: "Selling Price",
-                                hintText:
-                                    "Please enter selling price of product",
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2, bottom: 2),
-                              child: CustomFormField(
-                                controller: viewModel.sellingPrice,
-                                filled: true,
-                                fillColor: Colors.white,
-                                prefixIcon: const Text(
-                                  "GHS",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                label: "Cost Price",
-                                hintText: "Please enter cost price of product",
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 2, bottom: 2),
-                              child: CustomFormField(
-                                controller: viewModel.sellingPrice,
-                                filled: true,
-                                fillColor: Colors.white,
-                                prefixIcon: const Icon(
-                                  Icons.tag,
-                                  size: 15,
-                                ),
-                                label: "Opening Quantity",
-                                hintText: "Please enter quantity of product",
+                            Form(
+                              key: viewModel.productAdditionFormKey,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 2, bottom: 2),
+                                    child: CustomFormField(
+                                      controller: viewModel.name,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      label: "Name",
+                                      validator: (String? value) {
+                                        if (value!.isEmpty) {
+                                          return "Name is required";
+                                        }
+
+                                        return null;
+                                      },
+                                      hintText: "Please enter name of product",
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 2, bottom: 2),
+                                    child: CustomFormField(
+                                      controller: viewModel.sellingPrice,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      prefixIcon: const Text(
+                                        "GHS",
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      label: "Selling Price",
+                                      validator: (String? value) {
+                                        if (value!.isEmpty) {
+                                          return "Selling price required";
+                                        } else if (Utils().isNumeric(value) ==
+                                            false) {
+                                          return "Selling price should be a numeric value";
+                                        }
+
+                                        return null;
+                                      },
+                                      hintText:
+                                          "Please enter selling price of product",
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 2, bottom: 2),
+                                    child: CustomFormField(
+                                      controller: viewModel.costPrice,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      prefixIcon: const Text(
+                                        "GHS",
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      label: "Cost Price",
+                                      validator: (String? value) {
+                                        if (value!.isEmpty) {
+                                          return "Cost price required";
+                                        } else if (Utils().isNumeric(value) ==
+                                            false) {
+                                          return "Cost price should be a numeric values";
+                                        }
+
+                                        return null;
+                                      },
+                                      hintText:
+                                          "Please enter cost price of product",
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(
@@ -268,7 +412,9 @@ class ProductView extends StackedView<ProductViewModel> {
                               child: Align(
                                 alignment: Alignment.centerRight,
                                 child: CustomButton(
+                                  elevation: 2,
                                   width: 100,
+                                  isLoading: viewModel.isLoading,
                                   height: 40,
                                   color: AppColors.primaryColor,
                                   title: const Text(
@@ -276,7 +422,7 @@ class ProductView extends StackedView<ProductViewModel> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   ontap: () {
-                                    debugPrint("Adding product");
+                                    viewModel.addProductRequest();
                                   },
                                 ),
                               ),
