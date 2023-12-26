@@ -6,7 +6,8 @@ class DashboardViewModel extends BaseViewModel {
       shopSelceted = false,
       productSelected = false,
       stockSelected = false,
-      profileSelected = false;
+      profileSelected = false,
+      requisitionSelected = false;
 
   onSideMenuSelect(String type) {
     unselectAll();
@@ -16,6 +17,10 @@ class DashboardViewModel extends BaseViewModel {
     } else if (type == "shop") {
       shopSelceted = true;
       Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/shop");
+    } else if (type == "requisition") {
+      requisitionSelected = true;
+      Utils.sideMenuNavigationKey.currentState
+          ?.pushReplacementNamed("/requisition");
     } else if (type == "products") {
       productSelected = true;
       Utils.sideMenuNavigationKey.currentState
@@ -38,5 +43,6 @@ class DashboardViewModel extends BaseViewModel {
     stockSelected = false;
     productSelected = false;
     profileSelected = false;
+    requisitionSelected = false;
   }
 }

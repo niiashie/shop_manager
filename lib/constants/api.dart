@@ -7,5 +7,10 @@ class Api {
   static const register = '/register';
   static const addProduct = '/addProduct';
   static const getProducts = "/getProducts";
+  static const getAllProduct = "/getAllProduct";
   static const updateProduct = "/updateProduct";
+  static const sendRequisition = "/receiveRequisition";
+  static const pendingRequisition = "/getPendingRequisition";
+  static const acceptRequisition = "/acceptRequisition";
+  static const rejectRequisition = "/rejectRequisition";
 }

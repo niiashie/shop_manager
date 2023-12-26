@@ -7,6 +7,7 @@ import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
 import 'package:shop_manager/ui/home/home.view.dart';
 import 'package:shop_manager/ui/products/product.view.dart';
 import 'package:shop_manager/ui/profile/profile.view.dart';
+import 'package:shop_manager/ui/requisition/requisition.view.dart';
 import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/side_menu_item.dart';
 import 'package:shop_manager/ui/shop/shop.view.dart';
@@ -102,6 +103,14 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                               icon: Icons.inventory,
                               onTap: () {
                                 viewModel.onSideMenuSelect("stocks");
+                              },
+                              onHover: (a) {}),
+                          SideMenuItem(
+                              title: "Requisition",
+                              selected: viewModel.requisitionSelected,
+                              icon: Icons.inventory,
+                              onTap: () {
+                                viewModel.onSideMenuSelect("requisition");
                               },
                               onHover: (a) {}),
                           SideMenuItem(
@@ -223,6 +232,9 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                       break;
                     case '/shop':
                       page = const ShopView();
+                      break;
+                    case '/requisition':
+                      page = const RequisitionView();
                       break;
                     case '/stocks':
                       page = const StockView();

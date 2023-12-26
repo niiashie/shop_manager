@@ -7,4 +7,5 @@ class AppImages {
   static const successAnim = "assets/animation/success.json";
   static const errorAnim = "assets/animation/error.json";
   static const warningAnim = "assets/animation/warning.json";
+  static const empty = "assets/animation/empty.json";
 }

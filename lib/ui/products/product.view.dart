@@ -171,6 +171,14 @@ class ProductView extends StackedView<ProductViewModel> {
                                 Expanded(
                                   child: Center(
                                     child: Text(
+                                      "Quantity",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Text(
                                       "Edit",
                                       style: TextStyle(color: Colors.white),
                                     ),
@@ -234,6 +242,16 @@ class ProductView extends StackedView<ProductViewModel> {
                                                 child: Center(
                                                   child: Text(
                                                     "GHS ${viewModel.products[index].sellingPrice}",
+                                                    style: const TextStyle(
+                                                        color: AppColors
+                                                            .crudTextColor),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    "${viewModel.products[index].quantity}",
                                                     style: const TextStyle(
                                                         color: AppColors
                                                             .crudTextColor),
