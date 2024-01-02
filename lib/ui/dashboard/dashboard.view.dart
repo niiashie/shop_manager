@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shop_manager/app/locator.dart';
 import 'package:shop_manager/constants/assets.dart';
 import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
+import 'package:shop_manager/services/app_service.dart';
 import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
 import 'package:shop_manager/ui/home/home.view.dart';
 import 'package:shop_manager/ui/products/product.view.dart';
@@ -98,7 +100,7 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                               },
                               onHover: (a) {}),
                           SideMenuItem(
-                              title: "Stocks",
+                              title: "Transactions",
                               selected: viewModel.stockSelected,
                               icon: Icons.inventory,
                               onTap: () {
@@ -113,14 +115,14 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                                 viewModel.onSideMenuSelect("requisition");
                               },
                               onHover: (a) {}),
-                          SideMenuItem(
-                              title: "Profile",
-                              selected: viewModel.profileSelected,
-                              icon: Icons.person,
-                              onTap: () {
-                                viewModel.onSideMenuSelect("profile");
-                              },
-                              onHover: (a) {})
+                          // SideMenuItem(
+                          //     title: "Profile",
+                          //     selected: viewModel.profileSelected,
+                          //     icon: Icons.person,
+                          //     onTap: () {
+                          //       viewModel.onSideMenuSelect("profile");
+                          //     },
+                          //     onHover: (a) {})
                         ],
                       )),
                 ),
@@ -154,8 +156,8 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                         const SizedBox(
                           width: 10,
                         ),
-                        const Text(
-                          "Emmanuel Ashie",
+                        Text(
+                          locator<AppService>().user!.name!,
                         ),
                         const SizedBox(
                           width: 10,

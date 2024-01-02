@@ -45,4 +45,24 @@ class ProductApi extends BaseApi {
     var response = await get(url: "${Api.rejectRequisition}/$id");
     return ApiResponse.parse(response);
   }
+
+  Future<ApiResponse> makeTransaction(Map<String, dynamic> data) async {
+    var response = await post(url: Api.makeTransaction, data: data);
+    return ApiResponse.parse(response);
+  }
+
+  Future<ApiResponse> getTransactions(Map<String, dynamic> data) async {
+    var response = await post(url: Api.getTransactions, data: data);
+    return ApiResponse.parse(response);
+  }
+
+  Future<ApiResponse> getDashboardValues(Map<String, dynamic> data2) async {
+    var response = await post(url: Api.getDashboardValues, data: data2);
+    return ApiResponse.parse(response);
+  }
+
+  Future<ApiResponse> searchProduct(Map<String, dynamic> data2) async {
+    var response = await post(url: Api.searchProduct, data: data2);
+    return ApiResponse.parse(response);
+  }
 }

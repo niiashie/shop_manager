@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.18.1
   dio: ^5.1.2
   lottie: ^2.7.0
+  chart_components: ^1.0.1
 
 dev_dependencies:
   flutter_test:

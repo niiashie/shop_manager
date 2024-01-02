@@ -150,12 +150,18 @@ class RequisitionViewModel extends BaseViewModel {
   }
 
   addBatch() {
-    productSelection.add(allProducts[0]);
-    productUnitPrice.add(
-        TextEditingController(text: allProducts[0].sellingPrice.toString()));
-    productQuantity.add(TextEditingController(text: ""));
-    productAmount.add(TextEditingController(text: ""));
-    rebuildUi();
+    if (allProducts.isEmpty) {
+      appService.showErrorFromApiRequest(
+          title: "No Available Products",
+          message: "Please add products to proceed");
+    } else {
+      productSelection.add(allProducts[0]);
+      productUnitPrice.add(
+          TextEditingController(text: allProducts[0].sellingPrice.toString()));
+      productQuantity.add(TextEditingController(text: ""));
+      productAmount.add(TextEditingController(text: ""));
+      rebuildUi();
+    }
   }
 
   setProduct(Product product, index) {

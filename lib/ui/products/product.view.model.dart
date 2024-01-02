@@ -12,7 +12,7 @@ import 'package:stacked_services/stacked_services.dart' as pw;
 
 class ProductViewModel extends BaseViewModel {
   bool showAddProduct = false, isLoading = false, productsLoading = false;
-  TextEditingController? name, costPrice, sellingPrice;
+  TextEditingController? name, costPrice, sellingPrice, search;
   final GlobalKey<FormState> productAdditionFormKey = GlobalKey<FormState>();
   List<Product> products = [];
   var appService = locator<AppService>();
@@ -23,6 +23,7 @@ class ProductViewModel extends BaseViewModel {
     name = TextEditingController(text: "");
     costPrice = TextEditingController(text: "");
     sellingPrice = TextEditingController(text: "");
+    search = TextEditingController(text: "");
     getProducts(1);
   }
 
@@ -43,9 +44,38 @@ class ProductViewModel extends BaseViewModel {
         rebuildUi();
       }
     } on DioException catch (e) {
+      productsLoading = false;
+      rebuildUi();
       ApiResponse errorResponse = ApiResponse.parse(e.response);
       debugPrint(errorResponse.message);
       appService.showErrorFromApiRequest(message: errorResponse.message!);
+    }
+  }
+
+  onSearchProduct() async {
+    if (search!.text.isEmpty == false) {
+      products.clear();
+      try {
+        productsLoading = true;
+        rebuildUi();
+        ApiResponse searchResponse =
+            await productApi.searchProduct({"keyword": search!.text});
+        if (searchResponse.ok) {
+          List<dynamic> data2 = searchResponse.body;
+          for (var obj2 in data2) {
+            products.add(Product.fromJson(obj2));
+          }
+          productsLoading = false;
+          rebuildUi();
+        }
+      } on DioException catch (e) {
+        ApiResponse errorResponse = ApiResponse.parse(e.response);
+        debugPrint(errorResponse.message);
+        appService.showErrorFromApiRequest(message: errorResponse.message!);
+      }
+    } else {
+      appService.showErrorFromApiRequest(
+          message: "Please enter product to search", title: "Empty Product");
     }
   }
 

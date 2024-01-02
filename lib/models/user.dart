@@ -15,12 +15,21 @@ class User {
     this.token,
   });
 
-  User.fromJson(Map<String, dynamic> json) {
-    name = json['user']['name'];
-    pin = json['user']['pin'];
-    role = json['user']['role'];
-    id = json['user']['id'];
-    access = json['user']['access'];
-    token = json['token'];
+  User.fromJson(Map<String, dynamic> json, {bool isLogin = true}) {
+    if (isLogin) {
+      name = json['user']['name'];
+      pin = json['user']['pin'];
+      role = json['user']['role'];
+      id = json['user']['id'];
+      access = json['user']['access'];
+      token = json['token'];
+    } else {
+      name = json['name'];
+      pin = json['pin'];
+      role = json['role'];
+      id = json['id'];
+      access = json['access'];
+      token = "";
+    }
   }
 }

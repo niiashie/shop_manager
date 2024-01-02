@@ -11,8 +11,6 @@ import 'package:shop_manager/ui/shared/empty_results.dart';
 import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../../constants/app.dart';
-
 class RequisitionView extends StackedView<RequisitionViewModel> {
   const RequisitionView({Key? key}) : super(key: key);
 

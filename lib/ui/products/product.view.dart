@@ -5,6 +5,7 @@ import 'package:shop_manager/ui/products/product.view.model.dart';
 import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/custom_form_field.dart';
 import 'package:shop_manager/ui/shared/pagination.dart';
+import 'package:shop_manager/ui/shared/search.dart';
 import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
@@ -63,32 +64,87 @@ class ProductView extends StackedView<ProductViewModel> {
                           child: Padding(
                               padding: const EdgeInsets.only(right: 10),
                               child: viewModel.showAddProduct == false
-                                  ? CustomButton(
-                                      width: 130,
-                                      height: 40,
-                                      elevation: 2,
-                                      color: AppColors.primaryColor,
-                                      ontap: () {
-                                        viewModel.addProductTapped();
-                                      },
-                                      title: const Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.add,
-                                            size: 15,
-                                            color: Colors.white,
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                            width: 200,
+                                            child: CustomFormField(
+                                              controller: viewModel.search,
+                                              hintText: "Search Product",
+                                              contentPadding: 2,
+                                              fillColor: Colors.white,
+                                              filled: true,
+                                              onChanged: (a) {
+                                                if (viewModel
+                                                    .search!.text.isEmpty) {
+                                                  viewModel.getProducts(1);
+                                                }
+                                              },
+                                            )),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Material(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10)),
+                                            color: Colors.transparent,
+                                            elevation: 2,
+                                            child: InkWell(
+                                              child: Container(
+                                                width: 40,
+                                                height: 40,
+                                                decoration: const BoxDecoration(
+                                                  color: AppColors.primaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(10)),
+                                                ),
+                                                child: const Center(
+                                                  child: Icon(
+                                                    Icons.search,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                viewModel.onSearchProduct();
+                                              },
+                                            )),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        CustomButton(
+                                          width: 130,
+                                          height: 45,
+                                          elevation: 2,
+                                          color: AppColors.primaryColor,
+                                          ontap: () {
+                                            viewModel.addProductTapped();
+                                          },
+                                          title: const Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Icon(
+                                                Icons.add,
+                                                size: 15,
+                                                color: Colors.white,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                "Add Product",
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )
+                                            ],
                                           ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            "Add Product",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
-                                        ],
-                                      ),
+                                        )
+                                      ],
                                     )
                                   : Material(
                                       elevation: 2,
@@ -204,9 +260,14 @@ class ProductView extends StackedView<ProductViewModel> {
                                           height: 40,
                                           margin: const EdgeInsets.only(
                                               left: 20, right: 20),
-                                          color: index % 2 == 0
-                                              ? Colors.white
-                                              : Colors.grey[100],
+                                          color: viewModel.products[index]
+                                                      .quantity ==
+                                                  0
+                                              ? Colors.redAccent
+                                                  .withOpacity(0.5)
+                                              : index % 2 == 0
+                                                  ? Colors.white
+                                                  : Colors.grey[100],
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [

@@ -13,4 +13,8 @@ class Api {
   static const pendingRequisition = "/getPendingRequisition";
   static const acceptRequisition = "/acceptRequisition";
   static const rejectRequisition = "/rejectRequisition";
+  static const makeTransaction = "/makeTransaction";
+  static const getTransactions = "/getTransactions";
+  static const getDashboardValues = "/getDashboardValues";
+  static const searchProduct = "/searchProduct";
 }
