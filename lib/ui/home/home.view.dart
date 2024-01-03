@@ -437,7 +437,7 @@ class HomeView extends StackedView<HomeViewModel> {
                                                         milliseconds: 1800),
                                               ),
                                             ),
-                                            Align(
+                                            const Align(
                                               alignment: Alignment.bottomCenter,
                                               child: Text(
                                                 "Days Vrs Sales",

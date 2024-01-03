@@ -12,7 +12,7 @@ import 'package:stacked_services/stacked_services.dart' as pw;
 class LoginViewModel extends BaseViewModel {
   TextEditingController? pinController, passwordController;
   var appService = locator<AppService>();
-  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   bool isLoading = false;
   AuthApi authApi = AuthApi();
 

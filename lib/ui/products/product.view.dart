@@ -5,7 +5,6 @@ import 'package:shop_manager/ui/products/product.view.model.dart';
 import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/custom_form_field.dart';
 import 'package:shop_manager/ui/shared/pagination.dart';
-import 'package:shop_manager/ui/shared/search.dart';
 import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
@@ -193,10 +192,10 @@ class ProductView extends StackedView<ProductViewModel> {
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10))),
-                            child: const Row(
+                            child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Expanded(
+                                const Expanded(
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Padding(
@@ -208,15 +207,21 @@ class ProductView extends StackedView<ProductViewModel> {
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      "Cost Price",
-                                      style: TextStyle(color: Colors.white),
+                                Visibility(
+                                  visible: viewModel.appService.user!.role ==
+                                          "manager"
+                                      ? true
+                                      : false,
+                                  child: const Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        "Cost Price",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
                                   ),
                                 ),
-                                Expanded(
+                                const Expanded(
                                   child: Center(
                                     child: Text(
                                       "Selling Price",
@@ -224,7 +229,7 @@ class ProductView extends StackedView<ProductViewModel> {
                                     ),
                                   ),
                                 ),
-                                Expanded(
+                                const Expanded(
                                   child: Center(
                                     child: Text(
                                       "Quantity",
@@ -232,7 +237,15 @@ class ProductView extends StackedView<ProductViewModel> {
                                     ),
                                   ),
                                 ),
-                                Expanded(
+                                const Expanded(
+                                  child: Center(
+                                    child: Text(
+                                      "Location",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                                const Expanded(
                                   child: Center(
                                     child: Text(
                                       "Edit",
@@ -289,13 +302,20 @@ class ProductView extends StackedView<ProductViewModel> {
                                                   ),
                                                 ),
                                               ),
-                                              Expanded(
-                                                child: Center(
-                                                  child: Text(
-                                                    "GHS ${viewModel.products[index].costPrice}",
-                                                    style: const TextStyle(
-                                                        color: AppColors
-                                                            .crudTextColor),
+                                              Visibility(
+                                                visible: viewModel.appService
+                                                            .user!.role ==
+                                                        "manager"
+                                                    ? true
+                                                    : false,
+                                                child: Expanded(
+                                                  child: Center(
+                                                    child: Text(
+                                                      "GHS ${viewModel.products[index].costPrice}",
+                                                      style: const TextStyle(
+                                                          color: AppColors
+                                                              .crudTextColor),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -313,6 +333,16 @@ class ProductView extends StackedView<ProductViewModel> {
                                                 child: Center(
                                                   child: Text(
                                                     "${viewModel.products[index].quantity}",
+                                                    style: const TextStyle(
+                                                        color: AppColors
+                                                            .crudTextColor),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Center(
+                                                  child: Text(
+                                                    "${viewModel.products[index].location}",
                                                     style: const TextStyle(
                                                         color: AppColors
                                                             .crudTextColor),
@@ -477,6 +507,21 @@ class ProductView extends StackedView<ProductViewModel> {
                                       },
                                       hintText:
                                           "Please enter cost price of product",
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 2, bottom: 2),
+                                    child: CustomFormField(
+                                      controller: viewModel.location,
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      label: "Location",
+                                      hintText:
+                                          "Please enter location of product",
                                     ),
                                   ),
                                 ],

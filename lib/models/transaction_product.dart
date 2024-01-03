@@ -5,6 +5,7 @@ class TransactionProduct {
   int? quantity;
   double? amount;
   double? unitPrice;
+  double? costPrice;
   Product? product;
 
   TransactionProduct({
@@ -12,13 +13,15 @@ class TransactionProduct {
     this.quantity,
     this.amount,
     this.unitPrice,
+    this.costPrice,
     this.product,
   });
 
   TransactionProduct.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     quantity = json['quantity'];
-    unitPrice = double.parse(json['unit_price'].toString());
+    unitPrice = double.parse(json['unit_price_as_at_purchase'].toString());
+    costPrice = double.parse(json['cost_price_as_at_purchase'].toString());
     amount = double.parse(json['amount'].toString());
     product = Product.fromJson(json['product']);
   }

@@ -6,8 +6,6 @@ import 'package:shop_manager/ui/login/login.view.model.dart';
 import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/custom_form_field.dart';
 import 'package:stacked/stacked.dart';
-
-import '../../../constants/app.dart';
 import '../../constants/assets.dart';
 
 class LoginScreen extends StackedView<LoginViewModel> {

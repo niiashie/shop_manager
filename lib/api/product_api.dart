@@ -65,4 +65,9 @@ class ProductApi extends BaseApi {
     var response = await post(url: Api.searchProduct, data: data2);
     return ApiResponse.parse(response);
   }
+
+  Future<ApiResponse> getTransactionRange(Map<String, dynamic> data2) async {
+    var response = await post(url: Api.getTransactionRange, data: data2);
+    return ApiResponse.parse(response);
+  }
 }

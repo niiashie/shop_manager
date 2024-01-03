@@ -60,7 +60,7 @@ class StockViewModel extends BaseViewModel {
         lastDate: DateTime(2050));
     if (pickedDate != null) {
       selectedDate = pickedDate.toString().substring(0, 10);
-      debugPrint("Selected date is : $selectedDate");
+      //debugPrint("Selected date is : $selectedDate");
       controller.text = DateFormat.yMMMd().format(pickedDate);
     }
     rebuildUi();

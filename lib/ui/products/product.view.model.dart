@@ -12,7 +12,7 @@ import 'package:stacked_services/stacked_services.dart' as pw;
 
 class ProductViewModel extends BaseViewModel {
   bool showAddProduct = false, isLoading = false, productsLoading = false;
-  TextEditingController? name, costPrice, sellingPrice, search;
+  TextEditingController? name, costPrice, sellingPrice, search, location;
   final GlobalKey<FormState> productAdditionFormKey = GlobalKey<FormState>();
   List<Product> products = [];
   var appService = locator<AppService>();
@@ -24,6 +24,7 @@ class ProductViewModel extends BaseViewModel {
     costPrice = TextEditingController(text: "");
     sellingPrice = TextEditingController(text: "");
     search = TextEditingController(text: "");
+    location = TextEditingController(text: "N/A");
     getProducts(1);
   }
 
@@ -98,41 +99,48 @@ class ProductViewModel extends BaseViewModel {
   }
 
   addProductRequest() async {
-    if (productAdditionFormKey.currentState!.validate()) {
-      Map<String, dynamic> data = {
-        'name': name!.text,
-        'selling_price': sellingPrice!.text,
-        'cost_price': costPrice!.text,
-      };
+    if (appService.user!.role == "manager") {
+      if (productAdditionFormKey.currentState!.validate()) {
+        Map<String, dynamic> data = {
+          'name': name!.text,
+          'selling_price': sellingPrice!.text,
+          'cost_price': costPrice!.text,
+          'location': location!.text
+        };
 
-      try {
-        isLoading = true;
-        rebuildUi();
+        try {
+          isLoading = true;
+          rebuildUi();
 
-        ApiResponse response = await productApi.addProduct(data);
-        if (response.ok) {
-          Map<String, dynamic> data = response.body;
-          locator<DialogService>().show(
-              type: "success",
-              title: "Success",
-              message: data['message'],
-              showCancelBtn: false,
-              onOkayTap: () {
-                Navigator.of(pw.StackedService.navigatorKey!.currentContext!)
-                    .pop();
-              });
-          resetValues();
-          products.insert(0, Product.fromJson(data['product']));
+          ApiResponse response = await productApi.addProduct(data);
+          if (response.ok) {
+            Map<String, dynamic> data = response.body;
+            locator<DialogService>().show(
+                type: "success",
+                title: "Success",
+                message: data['message'],
+                showCancelBtn: false,
+                onOkayTap: () {
+                  Navigator.of(pw.StackedService.navigatorKey!.currentContext!)
+                      .pop();
+                });
+            resetValues();
+            products.insert(0, Product.fromJson(data['product']));
+            isLoading = false;
+            rebuildUi();
+          }
+        } on DioException catch (e) {
           isLoading = false;
           rebuildUi();
+          ApiResponse errorResponse = ApiResponse.parse(e.response);
+          debugPrint(errorResponse.message);
+          appService.showErrorFromApiRequest(message: errorResponse.message!);
         }
-      } on DioException catch (e) {
-        isLoading = false;
-        rebuildUi();
-        ApiResponse errorResponse = ApiResponse.parse(e.response);
-        debugPrint(errorResponse.message);
-        appService.showErrorFromApiRequest(message: errorResponse.message!);
       }
+    } else {
+      appService.showErrorFromApiRequest(
+          message: "Staff not allowed to add products",
+          title: "Unauthorized access");
     }
   }
 
@@ -140,6 +148,7 @@ class ProductViewModel extends BaseViewModel {
     name!.text = "";
     costPrice!.text = "";
     sellingPrice!.text = "";
+    location!.text = "N/A";
   }
 
   addProductTapped() {

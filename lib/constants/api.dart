@@ -17,4 +17,5 @@ class Api {
   static const getTransactions = "/getTransactions";
   static const getDashboardValues = "/getDashboardValues";
   static const searchProduct = "/searchProduct";
+  static const getTransactionRange = "/getTransactionRange";
 }

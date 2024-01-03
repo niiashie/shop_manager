@@ -43,7 +43,7 @@ class WarningDialog extends StatelessWidget {
                 height: 10,
               ),
               LottieBuilder.asset(
-                AppImages.successAnim,
+                AppImages.warningAnim,
                 width: 70,
                 height: 70,
               ),
@@ -63,6 +63,9 @@ class WarningDialog extends StatelessWidget {
               Text(
                 message!,
                 textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Visibility(
                   visible: hasCancel!,

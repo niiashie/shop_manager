@@ -13,8 +13,8 @@ class HomeViewModel extends BaseViewModel {
   bool isLoading = false;
   List<Product> products = [];
   Map<String, double> mapDdata = {};
-  List<String> days = ['Monday'];
-  List<double> daySales = [4];
+  List<String> days = [DateTime.now().toString().substring(0, 10)];
+  List<double> daySales = [0];
   var appService = locator<AppService>();
   getDashboardValues() async {
     try {
@@ -33,20 +33,22 @@ class HomeViewModel extends BaseViewModel {
         }
 
         //get sale plotting
-        Map<String, dynamic> sale = data['sale'];
-        for (var ob in sale.keys) {
-          List<dynamic> saleItems = sale[ob];
-          double total = 0;
-          days.add(ob);
-          for (var o in saleItems) {
-            total = total + double.parse(o['total'].toString());
-            debugPrint("Total: ${o['total']}");
+        if (data['sale'] is Map<String, dynamic>) {
+          Map<String, dynamic> sale = data['sale'];
+          for (var ob in sale.keys) {
+            List<dynamic> saleItems = sale[ob];
+            double total = 0;
+            days.add(ob);
+            for (var o in saleItems) {
+              total = total + double.parse(o['total'].toString());
+              debugPrint("Total: ${o['total']}");
+            }
+            mapDdata[ob] = total;
+            daySales.add(total);
           }
-          mapDdata[ob] = total;
-          daySales.add(total);
+          days.removeAt(0);
+          daySales.removeAt(0);
         }
-        days.removeAt(0);
-        daySales.removeAt(0);
 
         isLoading = false;
         rebuildUi();

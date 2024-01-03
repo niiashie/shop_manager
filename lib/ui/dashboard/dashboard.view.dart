@@ -8,9 +8,8 @@ import 'package:shop_manager/services/app_service.dart';
 import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
 import 'package:shop_manager/ui/home/home.view.dart';
 import 'package:shop_manager/ui/products/product.view.dart';
-import 'package:shop_manager/ui/profile/profile.view.dart';
+import 'package:shop_manager/ui/profit/profit_view.dart';
 import 'package:shop_manager/ui/requisition/requisition.view.dart';
-import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/side_menu_item.dart';
 import 'package:shop_manager/ui/shop/shop.view.dart';
 import 'package:shop_manager/ui/stock/stock.view.dart';
@@ -115,14 +114,14 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                                 viewModel.onSideMenuSelect("requisition");
                               },
                               onHover: (a) {}),
-                          // SideMenuItem(
-                          //     title: "Profile",
-                          //     selected: viewModel.profileSelected,
-                          //     icon: Icons.person,
-                          //     onTap: () {
-                          //       viewModel.onSideMenuSelect("profile");
-                          //     },
-                          //     onHover: (a) {})
+                          SideMenuItem(
+                              title: "Profit Margins",
+                              selected: viewModel.profileSelected,
+                              icon: Icons.payments,
+                              onTap: () {
+                                viewModel.onSideMenuSelect("profile");
+                              },
+                              onHover: (a) {})
                         ],
                       )),
                 ),
@@ -184,7 +183,7 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                               ),
                             ),
                             onTap: () {
-                              debugPrint("Logging out");
+                              viewModel.logout();
                             },
                           ),
                         )
@@ -229,8 +228,8 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                     case '/product':
                       page = const ProductView();
                       break;
-                    case '/profile':
-                      page = const ProfileView();
+                    case '/profit':
+                      page = const ProfitView();
                       break;
                     case '/shop':
                       page = const ShopView();

@@ -24,7 +24,7 @@ class ProductUpdate extends StatefulWidget {
 }
 
 class _ProductUpdateState extends State<ProductUpdate> {
-  TextEditingController? name, costPrice, sellingPrice;
+  TextEditingController? name, costPrice, sellingPrice, location;
   bool isLoading = false;
   ProductApi productApi = ProductApi();
   final GlobalKey<FormState> productUpdateFormKey = GlobalKey<FormState>();
@@ -36,6 +36,7 @@ class _ProductUpdateState extends State<ProductUpdate> {
         TextEditingController(text: widget.product!.costPrice.toString());
     sellingPrice =
         TextEditingController(text: widget.product!.sellingPrice.toString());
+    location = TextEditingController(text: widget.product!.location);
     super.initState();
   }
 
@@ -146,6 +147,25 @@ class _ProductUpdateState extends State<ProductUpdate> {
                         hintText: "Enter new selling price",
                       ),
                     )),
+                Padding(
+                    padding: const EdgeInsets.only(top: 5, bottom: 5),
+                    child: SizedBox(
+                      width: 340,
+                      child: CustomFormField(
+                        fillColor: Colors.white,
+                        filled: true,
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return "Location required";
+                          }
+
+                          return null;
+                        },
+                        controller: location,
+                        label: "Location",
+                        hintText: "Enter new product location",
+                      ),
+                    )),
               ],
             ),
           ),
@@ -188,7 +208,8 @@ class _ProductUpdateState extends State<ProductUpdate> {
         "id": widget.product!.id,
         'name': name!.text,
         'cost_price': costPrice!.text,
-        'selling_price': sellingPrice!.text
+        'selling_price': sellingPrice!.text,
+        'location': location!.text
       };
 
       try {

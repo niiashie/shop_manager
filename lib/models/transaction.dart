@@ -6,6 +6,7 @@ class Transaction {
   String? customer;
   double? total;
   User? user;
+  DateTime? dateAdded;
   List<TransactionProduct>? transactionProducts;
 
   Transaction(
@@ -13,6 +14,7 @@ class Transaction {
       this.customer,
       this.total,
       this.user,
+      this.dateAdded,
       this.transactionProducts});
 
   Transaction.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class Transaction {
     id = json['id'];
     customer = json['customer'];
     total = double.parse(json['total'].toString());
+    dateAdded = DateTime.parse(json['created_at']);
     user = User.fromJson(json['user'], isLogin: false);
     transactionProducts = products2;
   }

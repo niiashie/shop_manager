@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_is_empty
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
 import 'package:shop_manager/models/transaction.dart';
@@ -187,7 +188,7 @@ class StockView extends StackedView<StockViewModel> {
                                   children: [
                                     SizedBox(
                                       width: double.infinity,
-                                      height: 60,
+                                      height: 70,
                                       child: Stack(
                                         children: [
                                           Align(
@@ -223,9 +224,6 @@ class StockView extends StackedView<StockViewModel> {
                                                         )
                                                       ],
                                                     ),
-                                                    // const SizedBox(
-                                                    //   height: 2,
-                                                    // ),
                                                     Row(
                                                       mainAxisSize:
                                                           MainAxisSize.min,
@@ -243,6 +241,30 @@ class StockView extends StackedView<StockViewModel> {
                                                               .transactions[
                                                                   index]
                                                               .customer!,
+                                                          style:
+                                                              const TextStyle(
+                                                                  fontSize: 13),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        const Text(
+                                                          "Time : ",
+                                                          style: TextStyle(
+                                                              fontSize: 13),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                          DateFormat.jm()
+                                                              .format(viewModel
+                                                                  .transactions[
+                                                                      index]
+                                                                  .dateAdded!),
                                                           style:
                                                               const TextStyle(
                                                                   fontSize: 13),
