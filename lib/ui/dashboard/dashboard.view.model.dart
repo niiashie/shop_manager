@@ -65,6 +65,7 @@ class DashboardViewModel extends BaseViewModel {
         },
         onOkayTap: () {
           appService.user = null;
+          debugPrint("user : ${appService.user}");
           Navigator.of(pw.StackedService.navigatorKey!.currentContext!)
               .pushNamedAndRemoveUntil(
                   Routes.login, (Route<dynamic> route) => false);

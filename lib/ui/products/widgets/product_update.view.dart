@@ -188,7 +188,12 @@ class _ProductUpdateState extends State<ProductUpdate> {
                   style: TextStyle(color: Colors.white),
                 ),
                 ontap: () {
-                  updateProductRequest();
+                  locator<AppService>().user!.role == "manager"
+                      ? updateProductRequest()
+                      : appService.showErrorFromApiRequest(
+                          title: "Unauthorized Access",
+                          message:
+                              "You dont have the permission to update product");
                 },
               ),
             ),
