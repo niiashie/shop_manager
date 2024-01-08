@@ -15,10 +15,15 @@ class Product {
       this.location,
       this.dateAdded});
 
+  @override
+  String toString() {
+    return name!;
+  }
+
   Product.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    quantity = json['quantity'];
+    quantity = int.parse(json['quantity'].toString());
     location = json['location'];
     costPrice = double.parse(json['cost_price'].toString());
     sellingPrice = double.parse(json['selling_price'].toString());

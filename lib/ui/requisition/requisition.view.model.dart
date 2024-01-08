@@ -135,6 +135,7 @@ class RequisitionViewModel extends BaseViewModel {
           pendingRequisitions
               .add(Requisition.fromJson(data2['pending_requisition']));
           pendingRequisitionProducts = data2['products'];
+          debugPrint("requisition products: $pendingRequisitionProducts");
         }
 
         getProductLoading = false;

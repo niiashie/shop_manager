@@ -96,12 +96,12 @@ class ShopView extends StackedView<ShopViewModel> {
                         itemCount: viewModel.productSelection.length,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
+                        itemBuilder: (context, index2) {
                           return Container(
                             width: double.infinity,
                             padding: const EdgeInsets.only(top: 10, bottom: 10),
                             margin: const EdgeInsets.only(left: 25, right: 25),
-                            color: index % 2 == 0
+                            color: index2 % 2 == 0
                                 ? Colors.white
                                 : Colors.grey[100],
                             child: Row(
@@ -111,44 +111,113 @@ class ShopView extends StackedView<ShopViewModel> {
                                 const SizedBox(
                                   width: 10,
                                 ),
-                                Expanded(
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border.all(
-                                            color: Colors.black12, width: 1),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: DropdownButtonHideUnderline(
-                                      child: DropdownButton(
-                                          isExpanded: true,
-                                          hint: const Text("Select Product",
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black38)),
-                                          value:
-                                              viewModel.productSelection[index],
-                                          items: viewModel.allProducts
-                                              .map((Product value) {
-                                            return DropdownMenuItem<Product>(
-                                              value: value,
-                                              child: Text(
-                                                value.name!,
-                                                style: const TextStyle(
-                                                    color:
-                                                        AppColors.crudTextColor,
-                                                    fontSize: 12),
+                                SizedBox(
+                                  width: 270,
+                                  child: RawAutocomplete<Product>(
+                                    optionsBuilder:
+                                        (TextEditingValue textEditingValue) {
+                                      // viewModel
+                                      //         .addedEquipmentBrand =
+                                      //     textEditingValue.text;
+                                      if (textEditingValue.text == '') {
+                                        return const Iterable<Product>.empty();
+                                      } else {
+                                        List<Product> matches = <Product>[];
+                                        matches.addAll(viewModel.allProducts);
+
+                                        matches.retainWhere((s) {
+                                          return s.name!.toLowerCase().contains(
+                                              textEditingValue.text
+                                                  .toLowerCase());
+                                        });
+
+                                        return matches;
+                                      }
+                                    },
+                                    fieldViewBuilder: (
+                                      BuildContext context,
+                                      TextEditingController
+                                          textEditingController,
+                                      FocusNode focusNode,
+                                      VoidCallback onFieldSubmitted,
+                                    ) {
+                                      return Container(
+                                        width: double.infinity,
+                                        height: 47,
+                                        decoration: const BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)),
+                                            color: Colors.white),
+                                        child: TextFormField(
+                                            controller: textEditingController,
+                                            focusNode: focusNode,
+                                            onFieldSubmitted: (String value) {
+                                              onFieldSubmitted();
+                                            },
+                                            decoration: InputDecoration(
+                                              hintText: "Enter brand..",
+                                              labelText: "Product",
+                                              labelStyle: const TextStyle(
+                                                  color: Colors.black38),
+                                              hintStyle: const TextStyle(
+                                                color: Colors.black38,
+                                                fontSize: 14,
                                               ),
-                                            );
-                                          }).toList(),
-                                          onChanged: (Product? val) {
-                                            viewModel.setProduct(val!, index);
-                                          }),
-                                    ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.grey[300]!,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(15.0),
+                                              ),
+                                            )),
+                                      );
+                                    },
+                                    optionsViewBuilder: (
+                                      BuildContext context,
+                                      AutocompleteOnSelected<Product>
+                                          onSelected,
+                                      Iterable<Product> options,
+                                    ) {
+                                      return Align(
+                                        alignment: Alignment.topLeft,
+                                        child: Material(
+                                          elevation: 4.0,
+                                          child: ConstrainedBox(
+                                            constraints: const BoxConstraints(
+                                                maxHeight: 150, maxWidth: 380),
+                                            child: ListView.builder(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              itemCount: options.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                final Product option =
+                                                    options.elementAt(index);
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    onSelected(option);
+
+                                                    viewModel.setProduct(
+                                                        option, index2);
+                                                    // viewModel
+                                                    //     .removeAddNewBrandBtn();
+                                                    // viewModel
+                                                    //     .onBrandSelected(
+                                                    //         option);
+                                                  },
+                                                  child: ListTile(
+                                                    title: Text(option.name!),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 const SizedBox(
@@ -159,7 +228,7 @@ class ShopView extends StackedView<ShopViewModel> {
                                     fillColor: Colors.white,
                                     filled: true,
                                     controller:
-                                        viewModel.productUnitPrices[index],
+                                        viewModel.productUnitPrices[index2],
                                     readOnly: true,
                                     labelText: "Unit Price",
                                     prefixIcon: const Text(
@@ -176,13 +245,14 @@ class ShopView extends StackedView<ShopViewModel> {
                                       fillColor: Colors.white,
                                       filled: true,
                                       controller:
-                                          viewModel.productQuantity[index],
+                                          viewModel.productQuantity[index2],
                                       labelText: "Quantity",
                                       onChanged: (a) {
                                         if (Utils().isNumeric(a)) {
-                                          viewModel.onQuantityChanged(a, index);
+                                          viewModel.onQuantityChanged(
+                                              a, index2);
                                         } else {
-                                          viewModel.resetQuantity(index);
+                                          viewModel.resetQuantity(index2);
                                         }
                                       },
                                       prefixIcon: const Icon(
@@ -197,7 +267,7 @@ class ShopView extends StackedView<ShopViewModel> {
                                   child: CustomFormField(
                                     fillColor: Colors.white,
                                     filled: true,
-                                    controller: viewModel.productAmount[index],
+                                    controller: viewModel.productAmount[index2],
                                     labelText: "Amount",
                                     readOnly: true,
                                     prefixIcon: const Text(
@@ -233,7 +303,7 @@ class ShopView extends StackedView<ShopViewModel> {
                                         ),
                                       ),
                                       onTap: () {
-                                        viewModel.removeProduct(index);
+                                        viewModel.removeProduct(index2);
                                       },
                                     ),
                                   )),

@@ -28,8 +28,7 @@ class ShopViewModel extends BaseViewModel {
 
   addProductRow() {
     productSelection.add(allProducts[0]);
-    productUnitPrices.add(
-        TextEditingController(text: allProducts[0].sellingPrice.toString()));
+    productUnitPrices.add(TextEditingController(text: ""));
     productQuantity.add(TextEditingController(text: ""));
     productAmount.add(TextEditingController(text: ""));
 

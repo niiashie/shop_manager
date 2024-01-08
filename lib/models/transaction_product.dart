@@ -19,7 +19,7 @@ class TransactionProduct {
 
   TransactionProduct.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    quantity = json['quantity'];
+    quantity = int.parse(json['quantity'].toString());
     unitPrice = double.parse(json['unit_price_as_at_purchase'].toString());
     costPrice = double.parse(json['cost_price_as_at_purchase'].toString());
     amount = double.parse(json['amount'].toString());

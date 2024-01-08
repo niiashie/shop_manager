@@ -238,9 +238,10 @@ class StockView extends StackedView<StockViewModel> {
                                                         ),
                                                         Text(
                                                           viewModel
-                                                              .transactions[
-                                                                  index]
-                                                              .customer!,
+                                                                  .transactions[
+                                                                      index]
+                                                                  .customer ??
+                                                              "",
                                                           style:
                                                               const TextStyle(
                                                                   fontSize: 13),
