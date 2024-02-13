@@ -41,7 +41,6 @@ class HomeViewModel extends BaseViewModel {
             days.add(ob);
             for (var o in saleItems) {
               total = total + double.parse(o['total'].toString());
-              debugPrint("Total: ${o['total']}");
             }
             mapDdata[ob] = total;
             daySales.add(total);

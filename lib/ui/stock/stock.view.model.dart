@@ -10,20 +10,76 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart' as pw;
 
 class StockViewModel extends BaseViewModel {
-  TextEditingController? date;
-  String selectedDate = "";
-  double total = 0;
-  bool transactionLoading = false;
+  TextEditingController? date, startDate, endDate;
+  String selectedDate = "", startDateValue = "", endDateValue = "";
+  double total = 0, historyTotal = 0;
+  bool transactionLoading = false, showTransactionHistory = false;
   List<Transaction> transactions = [];
   ProductApi productApi = ProductApi();
   var appService = locator<AppService>();
   init() {
     date =
         TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
-
+    startDate = TextEditingController(text: "");
+    endDate = TextEditingController(text: "");
     getTransactions({"date": DateTime.now().toString().substring(0, 10)});
     //debugPrint("Today is ${DateTime.now()}");
     //DateFormat.yMMMd().format(pickedDate)
+  }
+
+  showHistory() {
+    showTransactionHistory = true;
+    transactions.clear();
+    rebuildUi();
+  }
+
+  showTodayTransaction() {
+    showTransactionHistory = false;
+    transactions.clear();
+    date =
+        TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
+    getTransactions({"date": DateTime.now().toString().substring(0, 10)});
+  }
+
+  filterTransactions() {
+    if (endDate!.text.isEmpty) {
+      appService.showErrorFromApiRequest(
+          message: "End date is required please");
+    } else if (startDate!.text.isEmpty) {
+      appService.showErrorFromApiRequest(
+          message: "Start date is required please");
+    } else {
+      getTransactions2(
+          {"start_date": startDateValue, "end_date": endDateValue});
+    }
+  }
+
+  getTransactions2(Map<String, dynamic> data) async {
+    try {
+      transactionLoading = true;
+      transactions.clear();
+      rebuildUi();
+
+      ApiResponse transactionRequest =
+          await productApi.getTransactionRange(data);
+      if (transactionRequest.ok) {
+        List<dynamic> data = transactionRequest.body;
+        historyTotal = 0;
+        for (var obj in data) {
+          historyTotal = historyTotal + Transaction.fromJson(obj).total!;
+
+          transactions.add(Transaction.fromJson(obj));
+        }
+        transactionLoading = false;
+        rebuildUi();
+      }
+    } on DioException catch (e) {
+      transactionLoading = false;
+      rebuildUi();
+      ApiResponse errorResponse = ApiResponse.parse(e.response);
+      debugPrint(errorResponse.message);
+      appService.showErrorFromApiRequest(message: errorResponse.message!);
+    }
   }
 
   getTransactions(Map<String, dynamic> data) async {
@@ -59,7 +115,14 @@ class StockViewModel extends BaseViewModel {
         firstDate: DateTime(1950),
         lastDate: DateTime(2050));
     if (pickedDate != null) {
-      selectedDate = pickedDate.toString().substring(0, 10);
+      if (controller == date) {
+        selectedDate = pickedDate.toString().substring(0, 10);
+      } else if (controller == startDate) {
+        startDateValue = pickedDate.toString().substring(0, 10);
+      } else if (controller == endDate) {
+        endDateValue = pickedDate.toString().substring(0, 10);
+      }
+
       //debugPrint("Selected date is : $selectedDate");
       controller.text = DateFormat.yMMMd().format(pickedDate);
     }

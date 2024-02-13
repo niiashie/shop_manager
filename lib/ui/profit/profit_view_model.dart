@@ -54,7 +54,7 @@ class ProfitViewModel extends BaseViewModel {
     double totalProfit = 0;
     for (var obj in t.transactionProducts!) {
       double profit = obj.amount! - (obj.costPrice! * obj.quantity!);
-      debugPrint("Profit: $profit");
+
       totalProfit = totalProfit + profit;
     }
 
@@ -75,7 +75,7 @@ class ProfitViewModel extends BaseViewModel {
         for (var obj in data) {
           total =
               total + double.parse(getTotalProfit(Transaction.fromJson(obj)));
-          debugPrint("Total: $total");
+
           transactions.add(Transaction.fromJson(obj));
         }
         transactionLoading = false;

@@ -205,7 +205,7 @@ class LoginScreen extends StackedView<LoginViewModel> {
                                             Navigator.of(context)
                                                 .pushReplacementNamed(
                                                     Routes.register);
-                                            debugPrint("Creating account");
+                                           
                                           },
                                         ),
                                       )
