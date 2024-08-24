@@ -13,6 +13,7 @@ class DashboardViewModel extends BaseViewModel {
       productSelected = false,
       stockSelected = false,
       profileSelected = false,
+      receivedGoodsSelected = false,
       requisitionSelected = false;
   var appService = locator<AppService>();
 
@@ -38,6 +39,10 @@ class DashboardViewModel extends BaseViewModel {
     } else if (type == "profile") {
       profileSelected = true;
       Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/profit");
+    } else if (type == "receivedGoods") {
+      receivedGoodsSelected = true;
+      Utils.sideMenuNavigationKey.currentState
+          ?.pushReplacementNamed("/receivedGoods");
     }
     rebuildUi();
   }
@@ -50,6 +55,7 @@ class DashboardViewModel extends BaseViewModel {
     productSelected = false;
     profileSelected = false;
     requisitionSelected = false;
+    receivedGoodsSelected = false;
   }
 
   logout() {

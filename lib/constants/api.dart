@@ -2,6 +2,7 @@ class Api {
   static const int connectionTimeout = 35;
   static const int receiveTimeout = 30;
   static String baseUrl = "https://pitt.com.frankatsongh.com/api";
+  //"http://shop_manager.test/api"; //
   static const auth = "/auth";
   static const login = "/login";
   static const register = '/register';
@@ -18,4 +19,5 @@ class Api {
   static const getDashboardValues = "/getDashboardValues";
   static const searchProduct = "/searchProduct";
   static const getTransactionRange = "/getTransactionRange";
+  static const getRequisitions = "/getRequisitions";
 }

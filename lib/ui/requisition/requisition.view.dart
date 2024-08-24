@@ -30,7 +30,8 @@ class RequisitionView extends StackedView<RequisitionViewModel> {
   @override
   Widget builder(BuildContext context, viewModel, Widget? child) {
     return Scaffold(
-        body: SizedBox(
+        body: Container(
+            color: Colors.white,
             width: double.infinity,
             height: double.infinity,
             child: Visibility(
@@ -225,49 +226,6 @@ class RequisitionView extends StackedView<RequisitionViewModel> {
                                   const SizedBox(
                                     width: 10,
                                   ),
-                                  // Expanded(
-                                  //   child:
-                                  //   Container(
-                                  //     width: double.infinity,
-                                  //     padding: const EdgeInsets.only(
-                                  //         left: 10, right: 10),
-                                  //     height: 45,
-                                  //     decoration: BoxDecoration(
-                                  //         color: Colors.white,
-                                  //         border: Border.all(
-                                  //             color: Colors.black12, width: 1),
-                                  //         borderRadius: const BorderRadius.all(
-                                  //             Radius.circular(10))),
-                                  //     child: DropdownButtonHideUnderline(
-                                  //       child: DropdownButton(
-                                  //           isExpanded: true,
-                                  //           hint: const Text("Select Product",
-                                  //               style: TextStyle(
-                                  //                   fontSize: 14,
-                                  //                   color: Colors.black38)),
-                                  //           value: viewModel
-                                  //               .productSelection[index],
-                                  //           items: viewModel.allProducts
-                                  //               .map((Product value) {
-                                  //             return DropdownMenuItem<Product>(
-                                  //               value: value,
-                                  //               child: Text(
-                                  //                 value.name!,
-                                  //                 style: const TextStyle(
-                                  //                     color: AppColors
-                                  //                         .crudTextColor,
-                                  //                     fontSize: 12),
-                                  //               ),
-                                  //             );
-                                  //           }).toList(),
-                                  //           onChanged: (Product? val) {
-                                  //             viewModel.setProduct(val!, index);
-                                  //             // widget.onChanged(val);
-                                  //             // viewModel.setSelectedNewRole(val!);
-                                  //           }),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   SizedBox(
                                     width: 270,
                                     child: RawAutocomplete<Product>(

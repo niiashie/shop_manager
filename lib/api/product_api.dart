@@ -70,4 +70,10 @@ class ProductApi extends BaseApi {
     var response = await post(url: Api.getTransactionRange, data: data2);
     return ApiResponse.parse(response);
   }
+
+  Future<ApiResponse> getAllRequisitions(int page) async {
+    var response =
+        await get(url: Api.getRequisitions, queryParameters: {"page": page});
+    return ApiResponse.parse(response);
+  }
 }

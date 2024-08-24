@@ -9,6 +9,7 @@ import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
 import 'package:shop_manager/ui/home/home.view.dart';
 import 'package:shop_manager/ui/products/product.view.dart';
 import 'package:shop_manager/ui/profit/profit_view.dart';
+import 'package:shop_manager/ui/received_goods/received_goods_view.dart';
 import 'package:shop_manager/ui/requisition/requisition.view.dart';
 import 'package:shop_manager/ui/shared/side_menu_item.dart';
 import 'package:shop_manager/ui/shop/shop.view.dart';
@@ -48,7 +49,7 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Container(
-                      width: 220,
+                      width: 250,
                       padding: const EdgeInsets.only(top: 5, bottom: 5),
                       //color: Colors.amber,
                       margin:
@@ -112,6 +113,14 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                               icon: Icons.inventory,
                               onTap: () {
                                 viewModel.onSideMenuSelect("requisition");
+                              },
+                              onHover: (a) {}),
+                          SideMenuItem(
+                              title: "Received Goods",
+                              selected: viewModel.receivedGoodsSelected,
+                              icon: Icons.store,
+                              onTap: () {
+                                viewModel.onSideMenuSelect("receivedGoods");
                               },
                               onHover: (a) {}),
                           SideMenuItem(
@@ -211,7 +220,7 @@ class DashBoardView extends StackedView<DashboardViewModel> {
             width: double.infinity,
             height: double.infinity,
             margin: const EdgeInsets.only(
-                left: 250, top: 50, right: 20, bottom: 20),
+                left: 280, top: 50, right: 20, bottom: 20),
             padding: const EdgeInsets.all(15),
             decoration: const BoxDecoration(
                 color: Colors.white,
@@ -236,6 +245,9 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                       break;
                     case '/requisition':
                       page = const RequisitionView();
+                      break;
+                    case '/receivedGoods':
+                      page = const ReceivedGoodsView();
                       break;
                     case '/stocks':
                       page = const StockView();
