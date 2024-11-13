@@ -22,7 +22,10 @@ class StockViewModel extends BaseViewModel {
         TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
     startDate = TextEditingController(text: "");
     endDate = TextEditingController(text: "");
-    getTransactions({"date": DateTime.now().toString().substring(0, 10)});
+    getTransactions({
+      "date": DateTime.now().toString().substring(0, 10),
+      "branch_id": appService.user!.branches![0].id
+    });
     //debugPrint("Today is ${DateTime.now()}");
     //DateFormat.yMMMd().format(pickedDate)
   }
@@ -38,7 +41,10 @@ class StockViewModel extends BaseViewModel {
     transactions.clear();
     date =
         TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
-    getTransactions({"date": DateTime.now().toString().substring(0, 10)});
+    getTransactions({
+      "date": DateTime.now().toString().substring(0, 10),
+      "branch_id": appService.user!.branches![0].id
+    });
   }
 
   filterTransactions() {
@@ -49,8 +55,11 @@ class StockViewModel extends BaseViewModel {
       appService.showErrorFromApiRequest(
           message: "Start date is required please");
     } else {
-      getTransactions2(
-          {"start_date": startDateValue, "end_date": endDateValue});
+      getTransactions2({
+        "start_date": startDateValue,
+        "end_date": endDateValue,
+        "branch_id": appService.selectedBranch!.id.toString()
+      });
     }
   }
 
@@ -92,6 +101,7 @@ class StockViewModel extends BaseViewModel {
       if (transactionRequest.ok) {
         List<dynamic> data = transactionRequest.body;
         total = 0;
+        debugPrint("result: $data");
         for (var obj in data) {
           total = total + Transaction.fromJson(obj).total!;
           transactions.add(Transaction.fromJson(obj));

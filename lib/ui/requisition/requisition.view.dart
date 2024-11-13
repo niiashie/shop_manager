@@ -303,6 +303,7 @@ class RequisitionView extends StackedView<RequisitionViewModel> {
                                           alignment: Alignment.topLeft,
                                           child: Material(
                                             elevation: 4.0,
+                                            color: Colors.white,
                                             child: ConstrainedBox(
                                               constraints: const BoxConstraints(
                                                   maxHeight: 150,
@@ -771,7 +772,7 @@ class RequisitionView extends StackedView<RequisitionViewModel> {
                                           Expanded(
                                             child: Center(
                                               child: Text(
-                                                "GHS ${viewModel.pendingRequisitionProducts[index]['product']['selling_price']}",
+                                                "GHS ${viewModel.pendingRequisitionProducts[index]['product']['branch'][0]['pivot']['selling_price']}",
                                               ),
                                             ),
                                           ),
@@ -788,7 +789,7 @@ class RequisitionView extends StackedView<RequisitionViewModel> {
                                           Expanded(
                                             child: Center(
                                               child: Text(
-                                                "GHS ${double.parse(viewModel.pendingRequisitionProducts[index]['quantity'].toString()) * double.parse(viewModel.pendingRequisitionProducts[index]['product']['selling_price'].toString())}",
+                                                "GHS ${double.parse(viewModel.pendingRequisitionProducts[index]['quantity'].toString()) * double.parse(viewModel.pendingRequisitionProducts[index]['product']['branch'][0]['pivot']['selling_price'].toString())}",
                                               ),
                                             ),
                                           )

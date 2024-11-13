@@ -33,13 +33,21 @@ class ProductViewModel extends BaseViewModel {
     try {
       productsLoading = true;
       rebuildUi();
-      ApiResponse getProductResponse = await productApi.getProducts(page: page);
+      ApiResponse getProductResponse = await productApi
+          .getProducts(appService.user!.branches![0].id.toString(), page: page);
       if (getProductResponse.ok) {
         List<dynamic> data = getProductResponse.data;
         totalPages = getProductResponse.body['last_page'];
 
         for (var obj in data) {
-          products.add(Product.fromJson(obj));
+          products.add(Product(
+              id: obj['id'],
+              name: obj['name'],
+              sellingPrice: double.parse(
+                  obj['branch'][0]['pivot']['selling_price'].toString()),
+              location: obj['location'],
+              quantity: obj['branch'][0]['pivot']['quantity'],
+              costPrice: double.parse(obj['cost_price'].toString())));
         }
         productsLoading = false;
         rebuildUi();
@@ -59,12 +67,21 @@ class ProductViewModel extends BaseViewModel {
       try {
         productsLoading = true;
         rebuildUi();
-        ApiResponse searchResponse =
-            await productApi.searchProduct({"keyword": search!.text});
+        ApiResponse searchResponse = await productApi.searchProduct({
+          "keyword": search!.text,
+          "branch_id": appService.user!.branches![0].id
+        });
         if (searchResponse.ok) {
           List<dynamic> data2 = searchResponse.body;
           for (var obj2 in data2) {
-            products.add(Product.fromJson(obj2));
+            products.add(Product(
+                id: obj2['id'],
+                name: obj2['name'],
+                sellingPrice: double.parse(
+                    obj2['branch'][0]['pivot']['selling_price'].toString()),
+                location: obj2['location'],
+                quantity: obj2['branch'][0]['pivot']['quantity'],
+                costPrice: double.parse(obj2['cost_price'].toString())));
           }
           productsLoading = false;
           rebuildUi();
@@ -103,9 +120,9 @@ class ProductViewModel extends BaseViewModel {
       if (productAdditionFormKey.currentState!.validate()) {
         Map<String, dynamic> data = {
           'name': name!.text,
-          'selling_price': sellingPrice!.text,
           'cost_price': costPrice!.text,
-          'location': location!.text
+          'location': location!.text,
+          'branch_id': appService.user!.branches![0].id
         };
 
         try {
@@ -115,6 +132,8 @@ class ProductViewModel extends BaseViewModel {
           ApiResponse response = await productApi.addProduct(data);
           if (response.ok) {
             Map<String, dynamic> data = response.body;
+            debugPrint("body: $data");
+            Map<String, dynamic> obj = data['product'][0];
             locator<DialogService>().show(
                 type: "success",
                 title: "Success",
@@ -125,7 +144,16 @@ class ProductViewModel extends BaseViewModel {
                       .pop();
                 });
             resetValues();
-            products.insert(0, Product.fromJson(data['product']));
+            products.insert(
+                0,
+                Product(
+                    id: obj['id'],
+                    name: obj['name'],
+                    sellingPrice: double.parse(
+                        obj['branch'][0]['pivot']['selling_price'].toString()),
+                    location: obj['location'],
+                    quantity: obj['branch'][0]['pivot']['quantity'],
+                    costPrice: double.parse(obj['cost_price'].toString())));
             isLoading = false;
             rebuildUi();
           }

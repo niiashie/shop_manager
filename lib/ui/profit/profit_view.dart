@@ -29,9 +29,10 @@ class ProfitView extends StackedView<ProfitViewModel> {
   @override
   Widget builder(BuildContext context, viewModel, Widget? child) {
     return Scaffold(
-        body: SizedBox(
+        body: Container(
             width: double.infinity,
             height: double.infinity,
+            color: Colors.white,
             child: Visibility(
                 visible:
                     viewModel.appService.user!.role == "manager" ? true : false,

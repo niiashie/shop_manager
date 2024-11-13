@@ -43,6 +43,7 @@ class LoginViewModel extends BaseViewModel {
                     "User account pending verification. Contact admin to allow access");
           } else {
             appService.user = User.fromJson(loginResponse.body);
+            appService.selectedBranch = appService.user!.branches![0];
             Navigator.of(pw.StackedService.navigatorKey!.currentContext!)
                 .pushReplacementNamed(Routes.dashboard);
           }

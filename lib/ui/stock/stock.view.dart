@@ -29,8 +29,9 @@ class StockView extends StackedView<StockViewModel> {
   @override
   Widget builder(BuildContext context, viewModel, Widget? child) {
     return Scaffold(
-        body: SizedBox(
+        body: Container(
             width: double.infinity,
+            color: Colors.white,
             height: double.infinity,
             child: SingleChildScrollView(
                 child: Visibility(

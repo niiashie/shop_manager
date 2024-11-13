@@ -1,3 +1,5 @@
+import 'package:shop_manager/models/branch.dart';
+
 class User {
   int? id;
   String? name;
@@ -5,6 +7,7 @@ class User {
   String? role;
   String? access;
   String? token;
+  List<Branch>? branches;
 
   User({
     this.id,
@@ -12,6 +15,7 @@ class User {
     this.pin,
     this.role,
     this.access,
+    this.branches,
     this.token,
   });
 
@@ -22,6 +26,7 @@ class User {
       role = json['user']['role'];
       id = json['user']['id'];
       access = json['user']['access'];
+      branches = getBranches(json['user']['branch']);
       token = json['token'];
     } else {
       name = json['name'];
@@ -31,5 +36,13 @@ class User {
       access = json['access'];
       token = "";
     }
+  }
+
+  getBranches(List<dynamic> branches) {
+    List<Branch> branchList = [];
+    for (var obj in branches) {
+      branchList.add(Branch.fromJson(obj));
+    }
+    return branchList;
   }
 }

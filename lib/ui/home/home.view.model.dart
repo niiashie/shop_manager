@@ -20,8 +20,11 @@ class HomeViewModel extends BaseViewModel {
     try {
       isLoading = true;
       rebuildUi();
-      ApiResponse response = await productApi.getDashboardValues(
-          {"date": DateTime.now().toString().substring(0, 10)});
+      ApiResponse response = await productApi.getDashboardValues({
+        "date": DateTime.now().toString().substring(0, 10),
+        "branch_id": appService.user!.branches![0].id
+      });
+
       if (response.ok) {
         Map<String, dynamic> data = response.body;
         registeredProducts = data['products'].toString();
@@ -29,7 +32,14 @@ class HomeViewModel extends BaseViewModel {
         salesToday = data['sales_today'].toString();
         List<dynamic> p = data['acsending'];
         for (var obj in p) {
-          products.add(Product.fromJson(obj));
+          products.add(Product(
+              id: obj['product']['id'],
+              name: obj['product']['name'],
+              costPrice: double.parse(obj['product']['cost_price'].toString()),
+              sellingPrice: double.parse(obj['selling_price'].toString()),
+              location: obj['product']['location'],
+              quantity: obj['quantity']));
+          // products.add(Product.fromJson(obj['product']));
         }
 
         //get sale plotting

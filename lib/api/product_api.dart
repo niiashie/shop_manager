@@ -8,15 +8,15 @@ class ProductApi extends BaseApi {
     return ApiResponse.parse(response);
   }
 
-  Future<ApiResponse> getProducts({int? page = 1}) async {
-    var response =
-        await get(url: Api.getProducts, queryParameters: {"page": page});
+  Future<ApiResponse> getProducts(String branchId, {int? page = 1}) async {
+    var response = await get(
+        url: "${Api.getProducts}/$branchId", queryParameters: {"page": page});
     return ApiResponse.parse(response);
   }
 
-  Future<ApiResponse> getAllProducts() async {
+  Future<ApiResponse> getAllProducts(String branchId) async {
     var response = await get(
-      url: Api.getAllProduct,
+      url: "${Api.getAllProduct}/$branchId",
     );
     return ApiResponse.parse(response);
   }
@@ -31,8 +31,8 @@ class ProductApi extends BaseApi {
     return ApiResponse.parse(response);
   }
 
-  Future<ApiResponse> getPendingRequisition() async {
-    var response = await get(url: Api.pendingRequisition);
+  Future<ApiResponse> getPendingRequisition(String branchId) async {
+    var response = await get(url: "${Api.pendingRequisition}/$branchId");
     return ApiResponse.parse(response);
   }
 
@@ -71,9 +71,10 @@ class ProductApi extends BaseApi {
     return ApiResponse.parse(response);
   }
 
-  Future<ApiResponse> getAllRequisitions(int page) async {
-    var response =
-        await get(url: Api.getRequisitions, queryParameters: {"page": page});
+  Future<ApiResponse> getAllRequisitions(int page, String branchId) async {
+    var response = await get(
+        url: "${Api.getRequisitions}/$branchId",
+        queryParameters: {"page": page});
     return ApiResponse.parse(response);
   }
 }

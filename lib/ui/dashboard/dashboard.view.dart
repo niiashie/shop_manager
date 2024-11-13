@@ -4,6 +4,7 @@ import 'package:shop_manager/app/locator.dart';
 import 'package:shop_manager/constants/assets.dart';
 import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
+import 'package:shop_manager/models/branch.dart';
 import 'package:shop_manager/services/app_service.dart';
 import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
 import 'package:shop_manager/ui/home/home.view.dart';
@@ -29,6 +30,7 @@ class DashBoardView extends StackedView<DashboardViewModel> {
   @override
   void onViewModelReady(DashboardViewModel viewModel) async {
     super.onViewModelReady(viewModel);
+    viewModel.init();
     debugPrint("Do something...");
   }
 
@@ -142,6 +144,64 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        const Icon(
+                          Icons.apartment,
+                          size: 10,
+                          color: AppColors.crudTextColor,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        SizedBox(
+                            height: 40,
+                            width: 130,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                  dropdownColor: Colors.white,
+                                  isExpanded: true,
+                                  icon: Icon(
+                                    Icons.expand_more,
+                                    color: Colors.grey[600],
+                                    size: 17,
+                                  ),
+                                  hint: const Text('All Branches',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black38)),
+                                  value: viewModel.selectedCompanyBranch,
+                                  items: viewModel.branchNames
+                                      .map((String branch) {
+                                    return DropdownMenuItem<String>(
+                                      value: branch,
+                                      child: Text(
+                                        branch,
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? val) {
+                                    Branch? branch = viewModel
+                                        .appService.user!.branches!
+                                        .where((branch) => branch.name == val!)
+                                        .toList()
+                                        .first;
+
+                                    if (branch.id !=
+                                        viewModel
+                                            .appService.selectedBranch!.id) {
+                                      viewModel.appService
+                                          .branchChangeListenerController
+                                          .add(branch.id.toString());
+                                      viewModel.appService.selectedBranch =
+                                          branch;
+
+                                      viewModel.setSelectedCompanyBranch(val);
+                                    }
+                                  }),
+                            )),
+
+                        const SizedBox(
+                          width: 10,
+                        ),
                         const Icon(
                           Icons.calendar_month,
                           size: 10,

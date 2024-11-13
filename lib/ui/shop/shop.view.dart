@@ -184,6 +184,7 @@ class ShopView extends StackedView<ShopViewModel> {
                                         alignment: Alignment.topLeft,
                                         child: Material(
                                           elevation: 4.0,
+                                          color: Colors.white,
                                           child: ConstrainedBox(
                                             constraints: const BoxConstraints(
                                                 maxHeight: 150, maxWidth: 380),

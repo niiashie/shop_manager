@@ -214,7 +214,8 @@ class _ProductUpdateState extends State<ProductUpdate> {
         'name': name!.text,
         'cost_price': costPrice!.text,
         'selling_price': sellingPrice!.text,
-        'location': location!.text
+        'location': location!.text,
+        'branch_id': appService.selectedBranch!.id
       };
 
       try {
@@ -225,8 +226,18 @@ class _ProductUpdateState extends State<ProductUpdate> {
             isLoading = false;
           });
           Map<String, dynamic> body = updateProductResponse.body;
+          debugPrint("response : $body");
           Navigator.of(pw.StackedService.navigatorKey!.currentContext!).pop();
-          widget.onProductUpdated(Product.fromJson(body['product']));
+          widget.onProductUpdated(Product(
+              id: body['product']['id'],
+              name: body['product']['name'],
+              sellingPrice: double.parse(body['product']['branch'][0]['pivot']
+                      ['selling_price']
+                  .toString()),
+              location: body['product']['location'],
+              quantity: widget.product!.quantity,
+              costPrice:
+                  double.parse(body['product']['cost_price'].toString())));
         }
       } on DioException catch (e) {
         isLoading = false;

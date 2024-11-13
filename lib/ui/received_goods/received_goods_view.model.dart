@@ -35,7 +35,8 @@ class ReceivedGoodsViewModel extends BaseViewModel {
     try {
       isLoading = true;
       rebuildUi();
-      ApiResponse response = await productApi.getAllRequisitions(page);
+      ApiResponse response = await productApi.getAllRequisitions(
+          page, appService.selectedBranch!.id!.toString());
       if (response.ok) {
         //debugPrint("result: ${response.data}");
         requisitions = Requisition().addAll(response.data);

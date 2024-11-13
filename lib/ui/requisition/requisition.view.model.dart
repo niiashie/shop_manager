@@ -38,11 +38,19 @@ class RequisitionViewModel extends BaseViewModel {
     getProductLoading = true;
     rebuildUi();
     try {
-      ApiResponse response = await productApi.getAllProducts();
+      ApiResponse response = await productApi
+          .getAllProducts(appService.selectedBranch!.id.toString());
       if (response.ok) {
         List<dynamic> results = response.body;
         for (var obj in results) {
-          allProducts.add(Product.fromJson(obj));
+          allProducts.add(Product(
+              id: obj['id'],
+              name: obj['name'],
+              sellingPrice: double.parse(
+                  obj['branch'][0]['pivot']['selling_price'].toString()),
+              location: obj['location'],
+              quantity: obj['branch'][0]['pivot']['quantity'],
+              costPrice: double.parse(obj['cost_price'].toString())));
         }
         getPendingRequisition();
       }
@@ -128,7 +136,8 @@ class RequisitionViewModel extends BaseViewModel {
   getPendingRequisition() async {
     pendingRequisitions.clear();
     try {
-      ApiResponse response2 = await productApi.getPendingRequisition();
+      ApiResponse response2 = await productApi
+          .getPendingRequisition(appService.selectedBranch!.id.toString());
       if (response2.ok) {
         Map<String, dynamic> data2 = response2.body;
         if (data2['pending_requisition'] != "empty") {
@@ -286,6 +295,7 @@ class RequisitionViewModel extends BaseViewModel {
         "description": description!.text,
         "user_id": appService.user!.id,
         "total": total,
+        "branch_id": appService.user!.branches![0].id,
         "products": formatProduct()
       };
       debugPrint("Sent data is : $data");

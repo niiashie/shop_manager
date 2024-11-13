@@ -7,7 +7,7 @@ class ReceivedGoods {
 
   ReceivedGoods.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    quantity = int.parse(json['quantity']);
-    product = Product.fromJson(json['product']);
+    quantity = int.parse(json['quantity'].toString());
+    product = Product.fromJson(json['product'], type: "received");
   }
 }

@@ -16,6 +16,18 @@ class DashboardViewModel extends BaseViewModel {
       receivedGoodsSelected = false,
       requisitionSelected = false;
   var appService = locator<AppService>();
+  List<String> branchNames = [];
+  String? selectedCompanyBranch;
+
+  init() {
+    branchNames = appService.user!.branches!.map((b) => b.name!).toList();
+    setSelectedCompanyBranch(branchNames[0]);
+  }
+
+  setSelectedCompanyBranch(a) {
+    selectedCompanyBranch = a;
+    rebuildUi();
+  }
 
   onSideMenuSelect(String type) {
     unselectAll();

@@ -30,7 +30,8 @@ class ProfitViewModel extends BaseViewModel {
     endDateTime = DateTime.now();
     getTransactions({
       "start_date": DateTime.now().toString().substring(0, 10),
-      "end_date": DateTime.now().toString().substring(0, 10)
+      "end_date": DateTime.now().toString().substring(0, 10),
+      "branch_id": appService.selectedBranch!.id.toString()
     });
   }
 
@@ -46,7 +47,11 @@ class ProfitViewModel extends BaseViewModel {
           message: "End date must be ahead of start date",
           title: "Invalid Entry");
     } else {
-      getTransactions({"start_date": startDateValue, "end_date": endDateValue});
+      getTransactions({
+        "start_date": startDateValue,
+        "end_date": endDateValue,
+        "branch_id": appService.selectedBranch!.id.toString()
+      });
     }
   }
 
