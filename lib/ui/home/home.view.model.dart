@@ -61,7 +61,7 @@ class HomeViewModel extends BaseViewModel {
               costPrice: double.parse(obj['product']['cost_price'].toString()),
               sellingPrice: double.parse(obj['selling_price'].toString()),
               location: obj['product']['location'],
-              quantity: obj['quantity']));
+              quantity: int.parse(obj['quantity'].toString())));
           // products.add(Product.fromJson(obj['product']));
         }
 

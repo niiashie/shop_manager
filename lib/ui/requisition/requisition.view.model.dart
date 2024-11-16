@@ -56,7 +56,8 @@ class RequisitionViewModel extends BaseViewModel {
               sellingPrice: double.parse(
                   obj['branch'][0]['pivot']['selling_price'].toString()),
               location: obj['location'],
-              quantity: obj['branch'][0]['pivot']['quantity'],
+              quantity:
+                  int.parse(obj['branch'][0]['pivot']['quantity'].toString()),
               costPrice: double.parse(obj['cost_price'].toString())));
         }
         getPendingRequisition();

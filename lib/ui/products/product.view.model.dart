@@ -68,7 +68,8 @@ class ProductViewModel extends BaseViewModel {
               sellingPrice: double.parse(
                   obj['branch'][0]['pivot']['selling_price'].toString()),
               location: obj['location'],
-              quantity: obj['branch'][0]['pivot']['quantity'],
+              quantity:
+                  int.parse(obj['branch'][0]['pivot']['quantity'].toString()),
               costPrice: double.parse(obj['cost_price'].toString())));
         }
         productsLoading = false;
@@ -102,7 +103,8 @@ class ProductViewModel extends BaseViewModel {
                 sellingPrice: double.parse(
                     obj2['branch'][0]['pivot']['selling_price'].toString()),
                 location: obj2['location'],
-                quantity: obj2['branch'][0]['pivot']['quantity'],
+                quantity: int.parse(
+                    obj2['branch'][0]['pivot']['quantity'].toString()),
                 costPrice: double.parse(obj2['cost_price'].toString())));
           }
           productsLoading = false;

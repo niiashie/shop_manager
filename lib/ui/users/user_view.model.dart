@@ -25,7 +25,7 @@ class UserViewModel extends BaseViewModel {
   User? selectedUser;
   String? newUserRole, newUserAccess;
   List<String> roles = ['manager', 'supervisor', 'staff', 'admin'];
-  List<String> access = ['granted', 'block'];
+  List<String> access = ['granted', 'block', 'pending'];
   AuthApi authApi = AuthApi();
   UsersApi usersApi = UsersApi();
 
@@ -82,35 +82,41 @@ class UserViewModel extends BaseViewModel {
   }
 
   updateUser() async {
-    isLoading = true;
-    rebuildUi();
-    try {
-      List<int> branchIds = selectedBranch.map((b) => b.id!).toList();
-      Map<String, dynamic> data = {
-        "role": newUserRole ?? selectedUser!.role,
-        "access": newUserAccess ?? selectedUser!.access,
-        "user_id": selectedUser!.id,
-        "branch_ids": branchIds
-      };
+    if (newUserRole == "admin" && appService.user!.role != "admin") {
+      appService.showErrorFromApiRequest(
+          message: "Only Admins can give admin roles");
+    } else {
+      isLoading = true;
+      rebuildUi();
+      try {
+        List<int> branchIds = selectedBranch.map((b) => b.id!).toList();
+        Map<String, dynamic> data = {
+          "role": newUserRole ?? selectedUser!.role,
+          "access": newUserAccess ?? selectedUser!.access,
+          "user_id": selectedUser!.id,
+          "branch_ids": branchIds
+        };
 
-      ApiResponse response = await usersApi.updateUser(data);
-      if (response.ok) {
-        isLoading = false;
-        rebuildUi();
-        closeUserDetail();
-        locator<dialog.DialogService>().show(
-            message: "Successfully added customer",
-            title: "Success",
-            okayBtnText: "Okay",
-            showCancelBtn: false,
-            onOkayTap: () {
-              Navigator.of(StackedService.navigatorKey!.currentContext!).pop();
-            });
-        getUsers();
+        ApiResponse response = await usersApi.updateUser(data);
+        if (response.ok) {
+          isLoading = false;
+          rebuildUi();
+          closeUserDetail();
+          locator<dialog.DialogService>().show(
+              message: "Successfully added customer",
+              title: "Success",
+              okayBtnText: "Okay",
+              showCancelBtn: false,
+              onOkayTap: () {
+                Navigator.of(StackedService.navigatorKey!.currentContext!)
+                    .pop();
+              });
+          getUsers();
+        }
+      } on DioException catch (e) {
+        ApiResponse errorResponse = ApiResponse.parse(e.response);
+        appService.showErrorFromApiRequest(message: errorResponse.message!);
       }
-    } on DioException catch (e) {
-      ApiResponse errorResponse = ApiResponse.parse(e.response);
-      appService.showErrorFromApiRequest(message: errorResponse.message!);
     }
   }
 
