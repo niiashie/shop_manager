@@ -20,6 +20,7 @@ class DashboardViewModel extends BaseViewModel {
   var appService = locator<AppService>();
   List<String> branchNames = [];
   String? selectedCompanyBranch;
+  Stream? stream;
 
   init() {
     branchNames = appService.user!.branches!.map((b) => b.name!).toList();
@@ -32,9 +33,12 @@ class DashboardViewModel extends BaseViewModel {
   }
 
   onSideMenuSelect(String type) {
+    appService.currentPage = type;
+
     unselectAll();
     if (type == "home") {
       homeSelected = true;
+
       Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/");
     } else if (type == "shop") {
       shopSelceted = true;

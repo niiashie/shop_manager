@@ -80,6 +80,12 @@ class CustomerViewModel extends BaseViewModel {
     }
   }
 
+  addCustomer() {
+    if (customerAdditionFormKey.currentState!.validate()) {
+      addCustomerRequest();
+    }
+  }
+
   addCustomerRequest() async {
     if (appService.user!.role != "staff") {
       Map<String, dynamic> data = {

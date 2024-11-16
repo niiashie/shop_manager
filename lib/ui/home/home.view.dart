@@ -18,7 +18,7 @@ class HomeView extends StackedView<HomeViewModel> {
   @override
   void onViewModelReady(HomeViewModel viewModel) async {
     super.onViewModelReady(viewModel);
-    viewModel.getDashboardValues();
+    viewModel.init();
     debugPrint("Do something...");
   }
 

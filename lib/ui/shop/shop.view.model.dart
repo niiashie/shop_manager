@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -30,6 +32,8 @@ class ShopViewModel extends BaseViewModel {
   var appService = locator<AppService>();
   String? selectedTransactionType, selectedCustomer;
   TextEditingController? cusName, cusPhone;
+  Stream<String>? stream;
+  late StreamSubscription<String> streamSubscription;
 
   addProductRow() {
     productSelection.add(allProducts[0]);
@@ -44,6 +48,7 @@ class ShopViewModel extends BaseViewModel {
     cusName = TextEditingController(text: "");
     cusPhone = TextEditingController(text: "");
     getAllProducts();
+    listenToBranchChangeEvents();
   }
 
   setSelectedTransactionType(String a) {
@@ -61,7 +66,7 @@ class ShopViewModel extends BaseViewModel {
       ApiResponse getProductResponse = await customerApi.getAllCustomers();
       if (getProductResponse.ok) {
         List<dynamic> data = getProductResponse.body;
-
+        allCustomers.clear();
         for (var obj in data) {
           allCustomers.add(Customer.fromJson(obj));
         }
@@ -71,6 +76,22 @@ class ShopViewModel extends BaseViewModel {
       debugPrint(errorResponse.message);
       appService.showErrorFromApiRequest(message: errorResponse.message!);
     }
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription and close the stream
+    streamSubscription.cancel();
+    super.dispose();
+  }
+
+  listenToBranchChangeEvents() {
+    stream = appService.branchChangeListenerController.stream;
+    streamSubscription = stream!.listen((event) {
+      if (appService.currentPage == "shop") {
+        getAllProducts();
+      }
+    });
   }
 
   getAllProducts() async {
@@ -248,7 +269,7 @@ class ShopViewModel extends BaseViewModel {
         "user_id": appService.user!.id,
         "total": total,
         "type": selectedTransactionType!.toLowerCase(),
-        "branch_id": appService.user!.branches![0].id,
+        "branch_id": appService.selectedBranch!.id,
         "products": formatProduct()
       };
       debugPrint("Sent data is : $data");

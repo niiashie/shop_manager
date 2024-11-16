@@ -94,7 +94,8 @@ class RequisitionView extends StackedView<RequisitionViewModel> {
                                 )),
                             Visibility(
                                 visible: viewModel.appService.user!.role ==
-                                    "manager",
+                                        "manager" ||
+                                    viewModel.appService.user!.role == "admin",
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: CustomButton(

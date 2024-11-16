@@ -1,12 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/api/auth_api.dart';
+import 'package:shop_manager/api/user_api.dart';
 import 'package:shop_manager/app/locator.dart';
 import 'package:shop_manager/models/api_response.dart';
 import 'package:shop_manager/models/branch.dart';
 import 'package:shop_manager/models/user.dart';
 import 'package:shop_manager/services/app_service.dart';
 import 'package:stacked/stacked.dart';
+import 'package:shop_manager/services/dialog.service.dart' as dialog;
+import 'package:stacked_services/stacked_services.dart';
 
 class UserViewModel extends BaseViewModel {
   bool isLoading = false,
@@ -21,17 +24,19 @@ class UserViewModel extends BaseViewModel {
   List<Branch> selectedBranch = [];
   User? selectedUser;
   String? newUserRole, newUserAccess;
-  List<String> roles = ['manager', 'supervisor', 'staff'];
+  List<String> roles = ['manager', 'supervisor', 'staff', 'admin'];
   List<String> access = ['granted', 'block'];
   AuthApi authApi = AuthApi();
+  UsersApi usersApi = UsersApi();
 
   getUsers() async {
     try {
       usersLoading = true;
       rebuildUi();
-      ApiResponse userResponse = await authApi.getUsers();
+      ApiResponse userResponse = await usersApi.getUsers();
       if (userResponse.ok) {
         List<dynamic> data = userResponse.data;
+        users.clear();
         for (var obj in data) {
           users.add(User.fromJson(obj, isLogin: false));
         }
@@ -57,8 +62,6 @@ class UserViewModel extends BaseViewModel {
     for (var obj in selectedBranch) {
       branches.removeWhere((element) => element.id == obj.id);
     }
-
-    debugPrint("branches left : ${branches.length}");
   }
 
   setSelectedRole(String role) {
@@ -76,6 +79,39 @@ class UserViewModel extends BaseViewModel {
     showUserDetail = true;
 
     rebuildUi();
+  }
+
+  updateUser() async {
+    isLoading = true;
+    rebuildUi();
+    try {
+      List<int> branchIds = selectedBranch.map((b) => b.id!).toList();
+      Map<String, dynamic> data = {
+        "role": newUserRole ?? selectedUser!.role,
+        "access": newUserAccess ?? selectedUser!.access,
+        "user_id": selectedUser!.id,
+        "branch_ids": branchIds
+      };
+
+      ApiResponse response = await usersApi.updateUser(data);
+      if (response.ok) {
+        isLoading = false;
+        rebuildUi();
+        closeUserDetail();
+        locator<dialog.DialogService>().show(
+            message: "Successfully added customer",
+            title: "Success",
+            okayBtnText: "Okay",
+            showCancelBtn: false,
+            onOkayTap: () {
+              Navigator.of(StackedService.navigatorKey!.currentContext!).pop();
+            });
+        getUsers();
+      }
+    } on DioException catch (e) {
+      ApiResponse errorResponse = ApiResponse.parse(e.response);
+      appService.showErrorFromApiRequest(message: errorResponse.message!);
+    }
   }
 
   showUserManager(index) {

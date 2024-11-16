@@ -422,6 +422,7 @@ class UsersView extends StackedView<UserViewModel> {
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   ontap: () {
+                                    viewModel.updateUser();
                                     //viewModel.addCustomerRequest();
                                   },
                                 ),

@@ -16,6 +16,7 @@ class StockViewModel extends BaseViewModel {
   bool transactionLoading = false, showTransactionHistory = false;
   List<Transaction> transactions = [];
   ProductApi productApi = ProductApi();
+  Stream? stream;
   var appService = locator<AppService>();
   init() {
     date =
@@ -24,8 +25,9 @@ class StockViewModel extends BaseViewModel {
     endDate = TextEditingController(text: "");
     getTransactions({
       "date": DateTime.now().toString().substring(0, 10),
-      "branch_id": appService.user!.branches![0].id
+      "branch_id": appService.selectedBranch!.id.toString()
     });
+    listenToBranchChangeEvents();
     //debugPrint("Today is ${DateTime.now()}");
     //DateFormat.yMMMd().format(pickedDate)
   }
@@ -43,7 +45,7 @@ class StockViewModel extends BaseViewModel {
         TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
     getTransactions({
       "date": DateTime.now().toString().substring(0, 10),
-      "branch_id": appService.user!.branches![0].id
+      "branch_id": appService.selectedBranch!.id.toString()
     });
   }
 
@@ -61,6 +63,18 @@ class StockViewModel extends BaseViewModel {
         "branch_id": appService.selectedBranch!.id.toString()
       });
     }
+  }
+
+  listenToBranchChangeEvents() {
+    stream = appService.branchChangeListenerController.stream;
+    stream!.listen((event) {
+      if (appService.currentPage == "stocks") {
+        getTransactions({
+          "date": DateTime.now().toString().substring(0, 10),
+          "branch_id": appService.selectedBranch!.id.toString()
+        });
+      }
+    });
   }
 
   getTransactions2(Map<String, dynamic> data) async {
@@ -92,6 +106,7 @@ class StockViewModel extends BaseViewModel {
   }
 
   getTransactions(Map<String, dynamic> data) async {
+    debugPrint("getting transactions");
     try {
       transactionLoading = true;
       transactions.clear();
@@ -101,7 +116,7 @@ class StockViewModel extends BaseViewModel {
       if (transactionRequest.ok) {
         List<dynamic> data = transactionRequest.body;
         total = 0;
-        debugPrint("result: $data");
+
         for (var obj in data) {
           total = total + Transaction.fromJson(obj).total!;
           transactions.add(Transaction.fromJson(obj));

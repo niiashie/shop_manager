@@ -10,6 +10,7 @@ import 'package:shop_manager/services/dialog.service.dart';
 class AppService {
   User? user;
   Branch? selectedBranch;
+  String? currentPage;
   StreamController<String> branchChangeListenerController =
       StreamController<String>.broadcast();
 

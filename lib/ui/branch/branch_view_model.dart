@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/api/auth_api.dart';
+import 'package:shop_manager/api/user_api.dart';
 import 'package:shop_manager/app/locator.dart';
 import 'package:shop_manager/models/api_response.dart';
 import 'package:shop_manager/models/branch.dart';
@@ -12,6 +13,7 @@ class BranchViewModel extends BaseViewModel {
   bool branchLoading = false, showAddBranch = false, isLoading = false;
   TextEditingController? name, phone, address;
   AuthApi authApi = AuthApi();
+  UsersApi userApi = UsersApi();
   var appService = locator<AppService>();
   final GlobalKey<FormState> customerAdditionFormKey = GlobalKey<FormState>();
 
@@ -32,7 +34,35 @@ class BranchViewModel extends BaseViewModel {
     rebuildUi();
   }
 
-  addBranchRequest() {}
+  addBranchRequest() async {
+    if (customerAdditionFormKey.currentState!.validate()) {
+      try {
+        Map<String, dynamic> data = {
+          "name": name!.text,
+          "address": address!.text,
+          "phone": phone!.text
+        };
+        isLoading = true;
+        rebuildUi();
+        ApiResponse response = await authApi.addBranch(data);
+        if (response.ok) {
+          appService.showErrorFromApiRequest(
+              message: "Successfully added new branch");
+
+          isLoading = false;
+          showAddBranch = false;
+          rebuildUi();
+          getBranches();
+        }
+      } on DioException catch (e) {
+        isLoading = false;
+        rebuildUi();
+        ApiResponse errorResponse = ApiResponse.parse(e.response);
+
+        appService.showErrorFromApiRequest(message: errorResponse.message!);
+      }
+    }
+  }
 
   getBranches() async {
     branchLoading = true;

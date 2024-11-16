@@ -34,8 +34,10 @@ class ProfitView extends StackedView<ProfitViewModel> {
             height: double.infinity,
             color: Colors.white,
             child: Visibility(
-                visible:
-                    viewModel.appService.user!.role == "manager" ? true : false,
+                visible: viewModel.appService.user!.role == "manager" ||
+                        viewModel.appService.user!.role == "admin"
+                    ? true
+                    : false,
                 replacement: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -198,7 +200,7 @@ class ProfitView extends StackedView<ProfitViewModel> {
                                 ),
                                 const SizedBox(width: 5),
                                 Text(
-                                  viewModel.total.toString(),
+                                  viewModel.total.toStringAsFixed(2),
                                   style: const TextStyle(
                                       fontSize: 17, color: Colors.white),
                                 ),
@@ -403,7 +405,7 @@ class ProfitView extends StackedView<ProfitViewModel> {
                                                   Expanded(
                                                     child: Center(
                                                       child: Text(
-                                                        "${viewModel.transactions[index].transactionProducts![index2].amount! - (viewModel.transactions[index].transactionProducts![index2].costPrice! * viewModel.transactions[index].transactionProducts![index2].quantity!)}",
+                                                        "${(viewModel.transactions[index].transactionProducts![index2].amount! - (viewModel.transactions[index].transactionProducts![index2].costPrice! * viewModel.transactions[index].transactionProducts![index2].quantity!)).toStringAsFixed(2)}",
                                                       ),
                                                     ),
                                                   ),

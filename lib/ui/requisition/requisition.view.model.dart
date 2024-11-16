@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/api/product_api.dart';
@@ -29,13 +31,17 @@ class RequisitionViewModel extends BaseViewModel {
   Color receivedGoodsColor = Colors.grey[500]!;
   List<Requisition> pendingRequisitions = [];
   List<dynamic> pendingRequisitionProducts = [];
+  Stream<String>? stream;
+  StreamSubscription<String>? streamSubscription;
 
   init() {
     description = TextEditingController(text: "");
     getAllProducts();
+    listenToBranchChangeEvents();
   }
 
   getAllProducts() async {
+    debugPrint("getting products");
     getProductLoading = true;
     rebuildUi();
     try {
@@ -81,6 +87,22 @@ class RequisitionViewModel extends BaseViewModel {
       receivedGoodsColor = Colors.grey[500]!;
     }
     rebuildUi();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription and close the stream
+    streamSubscription!.cancel();
+    super.dispose();
+  }
+
+  listenToBranchChangeEvents() {
+    stream = appService.branchChangeListenerController.stream;
+    streamSubscription = stream!.listen((event) {
+      debugPrint("page : ${appService.currentPage}");
+      if (appService.currentPage == "receivedGoods") {}
+      getAllProducts();
+    });
   }
 
   rejectRequisition() async {
@@ -144,6 +166,7 @@ class RequisitionViewModel extends BaseViewModel {
   }
 
   getPendingRequisition() async {
+    debugPrint("getting pending requisitions");
     pendingRequisitions.clear();
     try {
       ApiResponse response2 = await productApi
@@ -154,7 +177,6 @@ class RequisitionViewModel extends BaseViewModel {
           pendingRequisitions
               .add(Requisition.fromJson(data2['pending_requisition']));
           pendingRequisitionProducts = data2['products'];
-          debugPrint("requisition products: $pendingRequisitionProducts");
         }
 
         getProductLoading = false;
@@ -165,7 +187,7 @@ class RequisitionViewModel extends BaseViewModel {
       rebuildUi();
       ApiResponse errorResponse = ApiResponse.parse(e.response);
       debugPrint(errorResponse.message);
-      appService.showErrorFromApiRequest(message: errorResponse.message!);
+      // appService.showErrorFromApiRequest(message: errorResponse.message!);
     }
   }
 
@@ -305,7 +327,7 @@ class RequisitionViewModel extends BaseViewModel {
         "description": description!.text,
         "user_id": appService.user!.id,
         "total": total,
-        "branch_id": appService.user!.branches![0].id,
+        "branch_id": appService.selectedBranch!.id.toString(),
         "products": formatProduct()
       };
       debugPrint("Sent data is : $data");

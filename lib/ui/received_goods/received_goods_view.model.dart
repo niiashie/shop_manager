@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/api/product_api.dart';
@@ -14,9 +16,28 @@ class ReceivedGoodsViewModel extends BaseViewModel {
   int currentPage = 1, totalPages = 1;
   ProductApi productApi = ProductApi();
   var appService = locator<AppService>();
+  Stream<String>? stream;
+  StreamSubscription<String>? streamSubscription;
 
   init() {
     getRequisitions(currentPage);
+    listenToBranchChangeEvents();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription and close the stream
+    streamSubscription!.cancel();
+    super.dispose();
+  }
+
+  listenToBranchChangeEvents() {
+    stream = appService.branchChangeListenerController.stream;
+    streamSubscription = stream!.listen((event) {
+      if (appService.currentPage == "receivedGoods") {
+        getRequisitions(1);
+      }
+    });
   }
 
   closeRequisitionDetail() {
@@ -31,6 +52,7 @@ class ReceivedGoodsViewModel extends BaseViewModel {
   }
 
   getRequisitions(int page) async {
+    debugPrint("getting requisitions");
     requisitions.clear();
     try {
       isLoading = true;

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/api/product_api.dart';
@@ -19,13 +21,28 @@ class HomeViewModel extends BaseViewModel {
   List<String> days = [DateTime.now().toString().substring(0, 10)];
   List<double> daySales = [0];
   var appService = locator<AppService>();
+  Stream<String>? stream;
+  StreamSubscription<String>? streamSubscription;
+
+  init() {
+    getDashboardValues();
+    listenToBranchChangeEvents();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription and close the stream
+    streamSubscription!.cancel();
+    super.dispose();
+  }
+
   getDashboardValues() async {
     try {
       isLoading = true;
       rebuildUi();
       ApiResponse response = await productApi.getDashboardValues({
         "date": DateTime.now().toString().substring(0, 10),
-        "branch_id": appService.user!.branches![0].id
+        "branch_id": appService.selectedBranch!.id
       });
 
       if (response.ok) {
@@ -35,6 +52,8 @@ class HomeViewModel extends BaseViewModel {
         salesToday = data['sales_today'].toString();
         unpaidSales = data['unpaid_sales'].toString();
         List<dynamic> p = data['acsending'];
+        products.clear();
+
         for (var obj in p) {
           products.add(Product(
               id: obj['product']['id'],
@@ -73,5 +92,12 @@ class HomeViewModel extends BaseViewModel {
       debugPrint(errorResponse.message);
       appService.showErrorFromApiRequest(message: errorResponse.message!);
     }
+  }
+
+  listenToBranchChangeEvents() {
+    stream = appService.branchChangeListenerController.stream;
+    streamSubscription = stream!.listen((event) {
+      getDashboardValues();
+    });
   }
 }

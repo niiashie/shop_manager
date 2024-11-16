@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shop_manager/api/product_api.dart';
@@ -18,6 +20,8 @@ class ProductViewModel extends BaseViewModel {
   var appService = locator<AppService>();
   ProductApi productApi = ProductApi();
   int currentPage = 1, totalPages = 1;
+  Stream<String>? stream;
+  StreamSubscription<String>? streamSubscription;
 
   init() {
     name = TextEditingController(text: "");
@@ -26,15 +30,33 @@ class ProductViewModel extends BaseViewModel {
     search = TextEditingController(text: "");
     location = TextEditingController(text: "N/A");
     getProducts(1);
+    listenToBranchChangeEvents();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription and close the stream
+    streamSubscription!.cancel();
+    super.dispose();
+  }
+
+  listenToBranchChangeEvents() {
+    stream = appService.branchChangeListenerController.stream;
+    streamSubscription = stream!.listen((event) {
+      if (appService.currentPage == "products") {
+        getProducts(1);
+      }
+    });
   }
 
   getProducts(int page) async {
+    debugPrint("getting products");
     products.clear();
     try {
       productsLoading = true;
       rebuildUi();
       ApiResponse getProductResponse = await productApi
-          .getProducts(appService.user!.branches![0].id.toString(), page: page);
+          .getProducts(appService.selectedBranch!.id.toString(), page: page);
       if (getProductResponse.ok) {
         List<dynamic> data = getProductResponse.data;
         totalPages = getProductResponse.body['last_page'];
@@ -57,7 +79,7 @@ class ProductViewModel extends BaseViewModel {
       rebuildUi();
       ApiResponse errorResponse = ApiResponse.parse(e.response);
       debugPrint(errorResponse.message);
-      appService.showErrorFromApiRequest(message: errorResponse.message!);
+      //appService.showErrorFromApiRequest(message: errorResponse.message!);
     }
   }
 
@@ -116,7 +138,8 @@ class ProductViewModel extends BaseViewModel {
   }
 
   addProductRequest() async {
-    if (appService.user!.role == "manager") {
+    if (appService.user!.role == "manager" ||
+        appService.user!.role == "admin") {
       if (productAdditionFormKey.currentState!.validate()) {
         Map<String, dynamic> data = {
           'name': name!.text,

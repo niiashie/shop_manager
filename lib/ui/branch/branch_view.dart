@@ -316,6 +316,13 @@ class BranchView extends StackedView<BranchViewModel> {
                                       color: Colors.grey,
                                       size: 14,
                                     ),
+                                    validator: (String? value) {
+                                      if (value!.isEmpty) {
+                                        return "Location address required";
+                                      }
+
+                                      return null;
+                                    },
                                     hintText: "Please enter location address",
                                   ),
                                 ),

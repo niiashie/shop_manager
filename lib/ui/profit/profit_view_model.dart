@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +20,8 @@ class ProfitViewModel extends BaseViewModel {
   ProductApi productApi = ProductApi();
   String startDateValue = "", endDateValue = "";
   double total = 0;
+  Stream<String>? stream;
+  StreamSubscription<String>? streamSubscription;
 
   init() {
     startDate =
@@ -32,6 +36,27 @@ class ProfitViewModel extends BaseViewModel {
       "start_date": DateTime.now().toString().substring(0, 10),
       "end_date": DateTime.now().toString().substring(0, 10),
       "branch_id": appService.selectedBranch!.id.toString()
+    });
+    listenToBranchChangeEvents();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription and close the stream
+    streamSubscription!.cancel();
+    super.dispose();
+  }
+
+  listenToBranchChangeEvents() {
+    stream = appService.branchChangeListenerController.stream;
+    streamSubscription = stream!.listen((event) {
+      if (appService.currentPage == "profile") {
+        getTransactions({
+          "start_date": DateTime.now().toString().substring(0, 10),
+          "end_date": DateTime.now().toString().substring(0, 10),
+          "branch_id": appService.selectedBranch!.id.toString()
+        });
+      }
     });
   }
 
@@ -63,10 +88,11 @@ class ProfitViewModel extends BaseViewModel {
       totalProfit = totalProfit + profit;
     }
 
-    return totalProfit.toString();
+    return totalProfit.toStringAsFixed(2);
   }
 
   getTransactions(Map<String, dynamic> data) async {
+    debugPrint("Getting profits");
     try {
       transactionLoading = true;
       transactions.clear();

@@ -398,7 +398,7 @@ class CustomerView extends StackedView<CustomerViewModel> {
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 ontap: () {
-                                  viewModel.addCustomerRequest();
+                                  viewModel.addCustomer();
                                 },
                               ),
                             ),
