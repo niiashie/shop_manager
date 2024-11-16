@@ -77,4 +77,21 @@ class ProductApi extends BaseApi {
         queryParameters: {"page": page});
     return ApiResponse.parse(response);
   }
+
+  Future<ApiResponse> getUnpaidTransactions(String branchId) async {
+    var response = await get(url: "${Api.getUnpaidTransactions}/$branchId");
+    return ApiResponse.parse(response);
+  }
+
+  Future<ApiResponse> confirmUnpaidTransactions(
+      Map<String, dynamic> data) async {
+    var response = await post(url: Api.confirmCreditSalePayment, data: data);
+    return ApiResponse.parse(response);
+  }
+
+  Future<ApiResponse> reverseUnpaidTransactions(
+      Map<String, dynamic> data) async {
+    var response = await post(url: Api.reverseCreditSale, data: data);
+    return ApiResponse.parse(response);
+  }
 }

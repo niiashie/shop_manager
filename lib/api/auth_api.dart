@@ -13,4 +13,14 @@ class AuthApi extends BaseApi {
     var response = await post(url: Api.register, data: params);
     return ApiResponse.parse(response);
   }
+
+  Future<ApiResponse> getUsers() async {
+    var response = await get(url: Api.users);
+    return ApiResponse.parse(response);
+  }
+
+  Future<ApiResponse> getBranches() async {
+    var response = await get(url: Api.branches);
+    return ApiResponse.parse(response);
+  }
 }

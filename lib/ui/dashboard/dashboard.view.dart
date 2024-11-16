@@ -6,6 +6,8 @@ import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
 import 'package:shop_manager/models/branch.dart';
 import 'package:shop_manager/services/app_service.dart';
+import 'package:shop_manager/ui/branch/branch_view.dart';
+import 'package:shop_manager/ui/customers/customers_view.dart';
 import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
 import 'package:shop_manager/ui/home/home.view.dart';
 import 'package:shop_manager/ui/products/product.view.dart';
@@ -15,6 +17,8 @@ import 'package:shop_manager/ui/requisition/requisition.view.dart';
 import 'package:shop_manager/ui/shared/side_menu_item.dart';
 import 'package:shop_manager/ui/shop/shop.view.dart';
 import 'package:shop_manager/ui/stock/stock.view.dart';
+import 'package:shop_manager/ui/unpaid_transactions/unpaid_transactions_view.dart';
+import 'package:shop_manager/ui/users/user_view.dart';
 import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
@@ -110,11 +114,11 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                               },
                               onHover: (a) {}),
                           SideMenuItem(
-                              title: "Requisition",
+                              title: "Customers",
                               selected: viewModel.requisitionSelected,
-                              icon: Icons.inventory,
+                              icon: Icons.person,
                               onTap: () {
-                                viewModel.onSideMenuSelect("requisition");
+                                viewModel.onSideMenuSelect("customers");
                               },
                               onHover: (a) {}),
                           SideMenuItem(
@@ -125,12 +129,32 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                                 viewModel.onSideMenuSelect("receivedGoods");
                               },
                               onHover: (a) {}),
+                          Visibility(
+                              visible: viewModel.appService.user!.role ==
+                                      "manager" ||
+                                  viewModel.appService.user!.role == "admin",
+                              child: SideMenuItem(
+                                  title: "Profit Margins",
+                                  selected: viewModel.profileSelected,
+                                  icon: Icons.payments,
+                                  onTap: () {
+                                    viewModel.onSideMenuSelect("profile");
+                                  },
+                                  onHover: (a) {})),
                           SideMenuItem(
-                              title: "Profit Margins",
-                              selected: viewModel.profileSelected,
-                              icon: Icons.payments,
+                              title: "Users",
+                              selected: viewModel.usersSelected,
+                              icon: Icons.person,
                               onTap: () {
-                                viewModel.onSideMenuSelect("profile");
+                                viewModel.onSideMenuSelect("users");
+                              },
+                              onHover: (a) {}),
+                          SideMenuItem(
+                              title: "Branches",
+                              selected: viewModel.branchSelected,
+                              icon: Icons.timeline,
+                              onTap: () {
+                                viewModel.onSideMenuSelect("branches");
                               },
                               onHover: (a) {})
                         ],
@@ -306,11 +330,21 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                     case '/requisition':
                       page = const RequisitionView();
                       break;
+                    case '/customers':
+                      page = const CustomerView();
+                      break;
                     case '/receivedGoods':
                       page = const ReceivedGoodsView();
                       break;
+                    case '/unpaidTransactions':
+                      page = const UnpaidTransactionsView();
+                      break;
                     case '/stocks':
                       page = const StockView();
+                    case '/users':
+                      page = const UsersView();
+                    case '/branches':
+                      page = const BranchView();
                     default:
                       page = const HomeView();
                       break;

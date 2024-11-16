@@ -9,7 +9,10 @@ import 'package:stacked/stacked.dart';
 
 class HomeViewModel extends BaseViewModel {
   ProductApi productApi = ProductApi();
-  String registeredProducts = "", productsValue = "", salesToday = "";
+  String registeredProducts = "",
+      productsValue = "",
+      salesToday = "",
+      unpaidSales = "";
   bool isLoading = false;
   List<Product> products = [];
   Map<String, double> mapDdata = {};
@@ -30,6 +33,7 @@ class HomeViewModel extends BaseViewModel {
         registeredProducts = data['products'].toString();
         productsValue = data['products_value'].toString();
         salesToday = data['sales_today'].toString();
+        unpaidSales = data['unpaid_sales'].toString();
         List<dynamic> p = data['acsending'];
         for (var obj in p) {
           products.add(Product(

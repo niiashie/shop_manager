@@ -5,6 +5,7 @@ class User {
   String? name;
   String? pin;
   String? role;
+  String? phone;
   String? access;
   String? token;
   List<Branch>? branches;
@@ -15,6 +16,7 @@ class User {
     this.pin,
     this.role,
     this.access,
+    this.phone,
     this.branches,
     this.token,
   });
@@ -25,6 +27,7 @@ class User {
       pin = json['user']['pin'];
       role = json['user']['role'];
       id = json['user']['id'];
+      phone = json['user']['phone'];
       access = json['user']['access'];
       branches = getBranches(json['user']['branch']);
       token = json['token'];
@@ -33,6 +36,8 @@ class User {
       pin = json['pin'];
       role = json['role'];
       id = json['id'];
+      phone = json['phone'];
+      branches = getBranches(json['branch']);
       access = json['access'];
       token = "";
     }

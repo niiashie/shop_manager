@@ -4,7 +4,9 @@ import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
 import 'package:shop_manager/ui/received_goods/received_goods_view.model.dart';
 import 'package:shop_manager/ui/received_goods/widget/received_goods_details.dart';
+import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/pagination.dart';
+import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class ReceivedGoodsView extends StackedView<ReceivedGoodsViewModel> {
@@ -38,20 +40,45 @@ class ReceivedGoodsView extends StackedView<ReceivedGoodsViewModel> {
                     const SizedBox(
                       height: 10,
                     ),
-                    const SizedBox(
-                      width: double.infinity,
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            "Received Goods",
-                            style: TextStyle(
-                                fontFamily: AppFonts.poppinsBold, fontSize: 22),
-                          ),
-                        ),
-                      ),
-                    ),
+                    SizedBox(
+                        height: 40,
+                        width: double.infinity,
+                        child: Stack(
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  "Received Goods",
+                                  style: TextStyle(
+                                      fontFamily: AppFonts.poppinsBold,
+                                      fontSize: 22),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: CustomButton(
+                                  width: 120,
+                                  height: 40,
+                                  elevation: 2,
+                                  color: AppColors.primaryColor,
+                                  title: const Text(
+                                    "Requisition",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  ontap: () {
+                                    Utils.sideMenuNavigationKey.currentState
+                                        ?.pushNamed("/requisition");
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        )),
                     const SizedBox(
                       height: 25,
                     ),

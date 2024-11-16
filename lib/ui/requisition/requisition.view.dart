@@ -50,15 +50,48 @@ class RequisitionView extends StackedView<RequisitionViewModel> {
                         height: 50,
                         child: Stack(
                           children: [
-                            const Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Requisition",
-                                style: TextStyle(
-                                    fontFamily: AppFonts.poppinsBold,
-                                    fontSize: 22),
-                              ),
-                            ),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.baseline,
+                                  textBaseline: TextBaseline.alphabetic,
+                                  children: [
+                                    InkWell(
+                                      onHover: (a) {
+                                        viewModel.receivedGoodsOnHover(a);
+                                      },
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text(
+                                        "Received Goods",
+                                        style: TextStyle(
+                                            color: viewModel.receivedGoodsColor,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      ">",
+                                      style: TextStyle(
+                                          color: Colors.grey[500],
+                                          fontSize: 18),
+                                    ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    const Text(
+                                      "Requisition",
+                                      style: TextStyle(
+                                          fontFamily: AppFonts.poppinsBold,
+                                          fontSize: 22),
+                                    ),
+                                  ],
+                                )),
                             Visibility(
                                 visible: viewModel.appService.user!.role ==
                                     "manager",

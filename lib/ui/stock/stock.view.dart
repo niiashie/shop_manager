@@ -8,6 +8,7 @@ import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/custom_form_field.dart';
 import 'package:shop_manager/ui/shared/empty_results.dart';
 import 'package:shop_manager/ui/stock/stock.view.model.dart';
+import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 
 class StockView extends StackedView<StockViewModel> {
@@ -41,12 +42,12 @@ class StockView extends StackedView<StockViewModel> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: Stack(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -58,6 +59,26 @@ class StockView extends StackedView<StockViewModel> {
                             ),
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: CustomButton(
+                              width: 120,
+                              height: 40,
+                              color: Colors.redAccent,
+                              elevation: 2,
+                              title: const Text(
+                                "Credit Sales",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              ontap: () {
+                                Utils.sideMenuNavigationKey.currentState
+                                    ?.pushNamed("/unpaidTransactions");
+                              },
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -290,7 +311,8 @@ class StockView extends StackedView<StockViewModel> {
                                                           viewModel
                                                                   .transactions[
                                                                       index]
-                                                                  .customer ??
+                                                                  .customer!
+                                                                  .name ??
                                                               "",
                                                           style:
                                                               const TextStyle(
@@ -348,9 +370,13 @@ class StockView extends StackedView<StockViewModel> {
                                     Container(
                                       width: double.infinity,
                                       height: 40,
-                                      decoration: const BoxDecoration(
-                                          color: AppColors.primaryColor,
-                                          borderRadius: BorderRadius.only(
+                                      decoration: BoxDecoration(
+                                          color: viewModel.transactions[index]
+                                                      .type ==
+                                                  "cash"
+                                              ? AppColors.primaryColor
+                                              : Colors.redAccent,
+                                          borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10))),
                                       child: const Row(
@@ -498,12 +524,12 @@ class StockView extends StackedView<StockViewModel> {
                   const SizedBox(
                     height: 10,
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: Stack(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 10),
@@ -515,6 +541,27 @@ class StockView extends StackedView<StockViewModel> {
                             ),
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: CustomButton(
+                              width: 120,
+                              height: 40,
+                              color: Colors.redAccent,
+                              elevation: 2,
+                              title: const Text(
+                                "Credit Sales",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              ontap: () {
+                                Utils.sideMenuNavigationKey.currentState
+                                    ?.pushNamed("/unpaidTransactions");
+                                //viewModel.addProductRow();
+                              },
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -578,8 +625,11 @@ class StockView extends StackedView<StockViewModel> {
                                     ],
                                   ),
                                   ontap: () {
-                                    viewModel.getTransactions(
-                                        {"date": viewModel.selectedDate});
+                                    viewModel.getTransactions({
+                                      "date": viewModel.selectedDate,
+                                      "branch_id": viewModel
+                                          .appService.selectedBranch!.id
+                                    });
                                   },
                                 ),
                                 const SizedBox(
@@ -717,7 +767,8 @@ class StockView extends StackedView<StockViewModel> {
                                                           viewModel
                                                                   .transactions[
                                                                       index]
-                                                                  .customer ??
+                                                                  .customer!
+                                                                  .name ??
                                                               "",
                                                           style:
                                                               const TextStyle(
@@ -779,9 +830,13 @@ class StockView extends StackedView<StockViewModel> {
                                     Container(
                                       width: double.infinity,
                                       height: 40,
-                                      decoration: const BoxDecoration(
-                                          color: AppColors.primaryColor,
-                                          borderRadius: BorderRadius.only(
+                                      decoration: BoxDecoration(
+                                          color: viewModel.transactions[index]
+                                                      .type ==
+                                                  "cash"
+                                              ? AppColors.primaryColor
+                                              : Colors.redAccent,
+                                          borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10))),
                                       child: const Row(

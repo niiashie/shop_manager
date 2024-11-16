@@ -14,6 +14,8 @@ class DashboardViewModel extends BaseViewModel {
       stockSelected = false,
       profileSelected = false,
       receivedGoodsSelected = false,
+      branchSelected = false,
+      usersSelected = false,
       requisitionSelected = false;
   var appService = locator<AppService>();
   List<String> branchNames = [];
@@ -37,10 +39,10 @@ class DashboardViewModel extends BaseViewModel {
     } else if (type == "shop") {
       shopSelceted = true;
       Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/shop");
-    } else if (type == "requisition") {
+    } else if (type == "customers") {
       requisitionSelected = true;
       Utils.sideMenuNavigationKey.currentState
-          ?.pushReplacementNamed("/requisition");
+          ?.pushReplacementNamed("/customers");
     } else if (type == "products") {
       productSelected = true;
       Utils.sideMenuNavigationKey.currentState
@@ -55,6 +57,13 @@ class DashboardViewModel extends BaseViewModel {
       receivedGoodsSelected = true;
       Utils.sideMenuNavigationKey.currentState
           ?.pushReplacementNamed("/receivedGoods");
+    } else if (type == "users") {
+      usersSelected = true;
+      Utils.sideMenuNavigationKey.currentState?.pushReplacementNamed("/users");
+    } else if (type == "branches") {
+      branchSelected = true;
+      Utils.sideMenuNavigationKey.currentState
+          ?.pushReplacementNamed("/branches");
     }
     rebuildUi();
   }
@@ -65,6 +74,8 @@ class DashboardViewModel extends BaseViewModel {
     productSelected = false;
     stockSelected = false;
     productSelected = false;
+    usersSelected = false;
+    branchSelected = false;
     profileSelected = false;
     requisitionSelected = false;
     receivedGoodsSelected = false;

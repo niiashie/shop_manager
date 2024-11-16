@@ -6,7 +6,13 @@ class Api {
   static const auth = "/auth";
   static const login = "/login";
   static const register = '/register';
+  static const users = '/getUsers';
+  static const branches = '/getBranches';
   static const addProduct = '/addProduct';
+  static const getCustomer = '/getCustomer';
+  static const getAllCustomers = '/getAllCustomers';
+  static const addCustomer = '/addCustomer';
+  static const updateCustomer = '/updateCustomer';
   static const getProducts = "/getProducts";
   static const getAllProduct = "/getAllProduct";
   static const updateProduct = "/updateProduct";
@@ -20,4 +26,7 @@ class Api {
   static const searchProduct = "/searchProduct";
   static const getTransactionRange = "/getTransactionRange";
   static const getRequisitions = "/getRequisitions";
+  static const getUnpaidTransactions = "/getUnpaidTransactions";
+  static const confirmCreditSalePayment = "/confirmCreditSalePayment";
+  static const reverseCreditSale = "/reverseCreditSale";
 }

@@ -454,35 +454,6 @@ class ProductView extends StackedView<ProductViewModel> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(
-                                  //       top: 2, bottom: 2),
-                                  //   child: CustomFormField(
-                                  //     controller: viewModel.sellingPrice,
-                                  //     filled: true,
-                                  //     fillColor: Colors.white,
-                                  //     prefixIcon: const Text(
-                                  //       "GHS",
-                                  //       style: TextStyle(fontSize: 12),
-                                  //     ),
-                                  //     label: "Selling Price",
-                                  //     validator: (String? value) {
-                                  //       if (value!.isEmpty) {
-                                  //         return "Selling price required";
-                                  //       } else if (Utils().isNumeric(value) ==
-                                  //           false) {
-                                  //         return "Selling price should be a numeric value";
-                                  //       }
-
-                                  //       return null;
-                                  //     },
-                                  //     hintText:
-                                  //         "Please enter selling price of product",
-                                  //   ),
-                                  // ),
-                                  // const SizedBox(
-                                  //   height: 5,
-                                  // ),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         top: 2, bottom: 2),

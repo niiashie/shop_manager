@@ -26,6 +26,7 @@ class RequisitionViewModel extends BaseViewModel {
       rejectRequisitionLoading = false;
   double total = 0;
   Product? selectedProduct;
+  Color receivedGoodsColor = Colors.grey[500]!;
   List<Requisition> pendingRequisitions = [];
   List<dynamic> pendingRequisitionProducts = [];
 
@@ -70,6 +71,15 @@ class RequisitionViewModel extends BaseViewModel {
 
   showPendingRequisitions() {
     showPendingRequisition = true;
+    rebuildUi();
+  }
+
+  receivedGoodsOnHover(bool value) {
+    if (value) {
+      receivedGoodsColor = Colors.black;
+    } else {
+      receivedGoodsColor = Colors.grey[500]!;
+    }
     rebuildUi();
   }
 

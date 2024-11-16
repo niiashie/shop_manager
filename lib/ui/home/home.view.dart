@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
 import 'package:shop_manager/ui/home/home.view.model.dart';
+import 'package:shop_manager/ui/home/widget/home_item.dart';
 import 'package:stacked/stacked.dart';
 
 class HomeView extends StackedView<HomeViewModel> {
@@ -68,181 +69,35 @@ class HomeView extends StackedView<HomeViewModel> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                    child: Material(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  elevation: 2,
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 120,
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        color: Colors.white),
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 15, left: 15),
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  left: 12,
-                                                  right: 12,
-                                                  top: 7,
-                                                  bottom: 7),
-                                              decoration: const BoxDecoration(
-                                                  color: AppColors.primaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(15))),
-                                              child: const Text(
-                                                "Products Registered",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 15, bottom: 15),
-                                            child: Text(
-                                              viewModel.registeredProducts,
-                                              style: const TextStyle(
-                                                  fontFamily:
-                                                      AppFonts.poppinsBold,
-                                                  fontSize: 20),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                  child: HomeItem(
+                                    title: "Products Registered",
+                                    value: viewModel.registeredProducts,
                                   ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                  child: HomeItem(
+                                    title: "Products Value",
+                                    value: "GHS ${viewModel.productsValue}",
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: HomeItem(
+                                  title: "Sales Today",
+                                  value: "GHS ${viewModel.salesToday}",
                                 )),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
-                                    child: Material(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  elevation: 2,
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 120,
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        color: Colors.white),
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 15, left: 15),
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  left: 12,
-                                                  right: 12,
-                                                  top: 7,
-                                                  bottom: 7),
-                                              decoration: const BoxDecoration(
-                                                  color: AppColors.primaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(15))),
-                                              child: const Text(
-                                                "Products Value",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 15, bottom: 15),
-                                            child: Text(
-                                              "GHS ${viewModel.productsValue}",
-                                              style: const TextStyle(
-                                                  fontFamily:
-                                                      AppFonts.poppinsBold,
-                                                  fontSize: 20),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                    child: Material(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  elevation: 2,
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 120,
-                                    decoration: const BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10)),
-                                        color: Colors.white),
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.topLeft,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 15, left: 15),
-                                            child: Container(
-                                              padding: const EdgeInsets.only(
-                                                  left: 12,
-                                                  right: 12,
-                                                  top: 7,
-                                                  bottom: 7),
-                                              decoration: const BoxDecoration(
-                                                  color: AppColors.primaryColor,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(15))),
-                                              child: const Text(
-                                                "Sales Today",
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 15, bottom: 15),
-                                            child: Text(
-                                              "GHS ${viewModel.salesToday}",
-                                              style: const TextStyle(
-                                                  fontFamily:
-                                                      AppFonts.poppinsBold,
-                                                  fontSize: 20),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                    child: HomeItem(
+                                  title: "Unpaid Sales",
+                                  value: viewModel.unpaidSales,
                                 )),
                               ],
                             ),

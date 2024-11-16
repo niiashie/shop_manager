@@ -80,6 +80,7 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   width: double.infinity,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
+                        dropdownColor: Colors.white,
                         isExpanded: true,
                         hint: Text(widget.hintText,
                             style: const TextStyle(

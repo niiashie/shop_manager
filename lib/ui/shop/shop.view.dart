@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
+import 'package:shop_manager/models/customer.dart';
 import 'package:shop_manager/models/product.dart';
 import 'package:shop_manager/ui/shared/custom_button.dart';
 import 'package:shop_manager/ui/shared/custom_form_field.dart';
@@ -155,7 +156,7 @@ class ShopView extends StackedView<ShopViewModel> {
                                               onFieldSubmitted();
                                             },
                                             decoration: InputDecoration(
-                                              hintText: "Enter brand..",
+                                              hintText: "Enter ..",
                                               labelText: "Product",
                                               labelStyle: const TextStyle(
                                                   color: Colors.black38),
@@ -388,7 +389,7 @@ class ShopView extends StackedView<ShopViewModel> {
                           const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Customer Information(Optional)",
+                              "Transaction Details",
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -404,39 +405,284 @@ class ShopView extends StackedView<ShopViewModel> {
                       ),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 15,
                     ),
                     Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.only(top: 2, bottom: 2),
                       margin: const EdgeInsets.only(left: 20, right: 20),
+                      height: 50,
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Expanded(
-                            child: CustomFormField(
-                              fillColor: Colors.white,
-                              filled: true,
-                              controller: viewModel.cusName,
-                              labelText: "Customer Name",
-                              hintText: "Enter customer name",
+                            child: Container(
+                              width: double.infinity,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.grey[400]!, width: 0.5),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(15))),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const SizedBox(
+                                    width: 15,
+                                  ),
+                                  Icon(
+                                    Icons.point_of_sale_outlined,
+                                    color: Colors.grey[500],
+                                    size: 13,
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton(
+                                          dropdownColor: Colors.white,
+                                          isExpanded: true,
+                                          icon: Icon(
+                                            Icons.expand_more,
+                                            color: Colors.grey[600],
+                                            size: 17,
+                                          ),
+                                          hint: const Text(
+                                              'Select transaction type',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black38)),
+                                          value:
+                                              viewModel.selectedTransactionType,
+                                          items: viewModel.transactionTypes
+                                              .map((String branch) {
+                                            return DropdownMenuItem<String>(
+                                              value: branch,
+                                              child: Text(
+                                                branch,
+                                                style: const TextStyle(
+                                                    fontSize: 12),
+                                              ),
+                                            );
+                                          }).toList(),
+                                          onChanged: (String? val) {
+                                            viewModel
+                                                .setSelectedTransactionType(
+                                                    val!);
+                                          }),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           const SizedBox(
                             width: 15,
                           ),
                           Expanded(
-                            child: CustomFormField(
-                              fillColor: Colors.white,
-                              filled: true,
-                              controller: viewModel.cusPhone,
-                              labelText: "Customer Phone",
-                              hintText: "Enter customer phone",
-                            ),
-                          ),
+                              child: RawAutocomplete<Customer>(
+                            optionsBuilder:
+                                (TextEditingValue textEditingValue) {
+                              if (textEditingValue.text == '') {
+                                return const Iterable<Customer>.empty();
+                              } else {
+                                List<Customer> matches = <Customer>[];
+                                matches.addAll(viewModel.allCustomers);
+
+                                matches.retainWhere((s) {
+                                  return s.name!.toLowerCase().contains(
+                                      textEditingValue.text.toLowerCase());
+                                });
+
+                                return matches;
+                              }
+                            },
+                            fieldViewBuilder: (
+                              BuildContext context,
+                              TextEditingController textEditingController,
+                              FocusNode focusNode,
+                              VoidCallback onFieldSubmitted,
+                            ) {
+                              return Container(
+                                width: double.infinity,
+                                height: 47,
+                                decoration: const BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    color: Colors.white),
+                                child: TextFormField(
+                                    controller: textEditingController,
+                                    focusNode: focusNode,
+                                    onFieldSubmitted: (String value) {
+                                      onFieldSubmitted();
+                                    },
+                                    decoration: InputDecoration(
+                                      hintText: "Enter customer",
+                                      labelText: "Customer",
+                                      labelStyle: const TextStyle(
+                                          color: Colors.black38),
+                                      hintStyle: const TextStyle(
+                                        color: Colors.black38,
+                                        fontSize: 14,
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                          color: Colors.grey[300]!,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                      ),
+                                    )),
+                              );
+                            },
+                            optionsViewBuilder: (
+                              BuildContext context,
+                              AutocompleteOnSelected<Customer> onSelected,
+                              Iterable<Customer> options,
+                            ) {
+                              return Align(
+                                alignment: Alignment.topLeft,
+                                child: Material(
+                                  elevation: 4.0,
+                                  color: Colors.white,
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                        maxHeight: 150, maxWidth: 380),
+                                    child: ListView.builder(
+                                      padding: const EdgeInsets.all(8.0),
+                                      itemCount: options.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        final Customer option =
+                                            options.elementAt(index);
+                                        return GestureDetector(
+                                          onTap: () {
+                                            onSelected(option);
+                                            viewModel.setCreditCustomer(option);
+
+                                            // viewModel
+                                            //     .removeAddNewBrandBtn();
+                                            // viewModel
+                                            //     .onBrandSelected(
+                                            //         option);
+                                          },
+                                          child: ListTile(
+                                            title: Text(option.name!),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                              // Container(
+                              //   width: double.infinity,
+                              //   height: 50,
+                              //   decoration: BoxDecoration(
+                              //       border: Border.all(
+                              //           color: Colors.grey[400]!, width: 0.5),
+                              //       borderRadius: const BorderRadius.all(
+                              //           Radius.circular(15))),
+                              //   child: Row(
+                              //     mainAxisSize: MainAxisSize.max,
+                              //     crossAxisAlignment: CrossAxisAlignment.center,
+                              //     children: [
+                              //       const SizedBox(
+                              //         width: 15,
+                              //       ),
+                              //       Icon(
+                              //         Icons.person_2,
+                              //         color: Colors.grey[500],
+                              //         size: 13,
+                              //       ),
+                              //       const SizedBox(
+                              //         width: 10,
+                              //       ),
+                              //       Expanded(
+                              //           child:
+
+                              //           // DropdownButtonHideUnderline(
+                              //           //   child: DropdownButton(
+                              //           //       dropdownColor: Colors.white,
+                              //           //       isExpanded: true,
+                              //           //       icon: Icon(
+                              //           //         Icons.expand_more,
+                              //           //         color: Colors.grey[600],
+                              //           //         size: 17,
+                              //           //       ),
+                              //           //       hint: const Text('Select customer',
+                              //           //           style: TextStyle(
+                              //           //               fontSize: 14,
+                              //           //               color: Colors.black38)),
+                              //           //       value: viewModel.selectedCustomer,
+                              //           //       items: viewModel.allCustomers
+                              //           //           .map((Customer customer) {
+                              //           //         return DropdownMenuItem<String>(
+                              //           //           value: customer.id.toString(),
+                              //           //           child: Text(
+                              //           //             "${customer.name} (${customer.phone})",
+                              //           //             style: const TextStyle(
+                              //           //                 fontSize: 12),
+                              //           //           ),
+                              //           //         );
+                              //           //       }).toList(),
+                              //           //       onChanged: (String? val) {
+                              //           //         viewModel.setSelectedCustomer(val!);
+                              //           //       }),
+                              //           // ),
+                              //           ),
+                              //       const SizedBox(
+                              //         width: 10,
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
+                              )
                         ],
                       ),
                     ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+
+                    // Container(
+                    //   width: double.infinity,
+                    //   padding: const EdgeInsets.only(top: 2, bottom: 2),
+                    //   margin: const EdgeInsets.only(left: 20, right: 20),
+                    //   child: Row(
+                    //     mainAxisSize: MainAxisSize.max,
+                    //     children: [
+                    //       Expanded(
+                    //         child: CustomFormField(
+                    //           fillColor: Colors.white,
+                    //           filled: true,
+                    //           controller: viewModel.cusName,
+                    //           labelText: "Customer Name",
+                    //           hintText: "Enter customer name",
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         width: 15,
+                    //       ),
+                    //       Expanded(
+                    //         child: CustomFormField(
+                    //           fillColor: Colors.white,
+                    //           filled: true,
+                    //           controller: viewModel.cusPhone,
+                    //           labelText: "Customer Phone",
+                    //           hintText: "Enter customer phone",
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     const SizedBox(
                       height: 15,
                     ),

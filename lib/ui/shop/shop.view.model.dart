@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shop_manager/api/customer_api.dart';
 import 'package:shop_manager/api/product_api.dart';
 import 'package:shop_manager/app/locator.dart';
 import 'package:shop_manager/models/api_response.dart';
+import 'package:shop_manager/models/customer.dart';
 import 'package:shop_manager/models/product.dart';
 import 'package:shop_manager/services/app_service.dart';
 import 'package:shop_manager/services/dialog.service.dart';
@@ -12,18 +14,21 @@ import 'package:stacked_services/stacked_services.dart' as pw;
 
 class ShopViewModel extends BaseViewModel {
   List<Widget> productRows = [];
-  List<String> productList = ['Product A', 'Product B'];
+  List<String> transactionTypes = ['Cash', 'Credit'];
   Map<String, double> productPrices = {"Product A": 120, "Product B": 45};
   List<Map<String, dynamic>> productSelections = [];
   List<Product> allProducts = [];
+  List<Customer> allCustomers = [];
   List<TextEditingController> productUnitPrices = [];
   List<TextEditingController> productQuantity = [];
   List<TextEditingController> productAmount = [];
   List<Product> productSelection = [];
   ProductApi productApi = ProductApi();
+  CustomerApi customerApi = CustomerApi();
   bool getProductLoading = false, makeTransactionLoading = false;
   double total = 0;
   var appService = locator<AppService>();
+  String? selectedTransactionType, selectedCustomer;
   TextEditingController? cusName, cusPhone;
 
   addProductRow() {
@@ -39,6 +44,33 @@ class ShopViewModel extends BaseViewModel {
     cusName = TextEditingController(text: "");
     cusPhone = TextEditingController(text: "");
     getAllProducts();
+  }
+
+  setSelectedTransactionType(String a) {
+    selectedTransactionType = a;
+    rebuildUi();
+  }
+
+  setSelectedCustomer(a) {
+    selectedCustomer = a;
+    rebuildUi();
+  }
+
+  getAllCustomers() async {
+    try {
+      ApiResponse getProductResponse = await customerApi.getAllCustomers();
+      if (getProductResponse.ok) {
+        List<dynamic> data = getProductResponse.body;
+
+        for (var obj in data) {
+          allCustomers.add(Customer.fromJson(obj));
+        }
+      }
+    } on DioException catch (e) {
+      ApiResponse errorResponse = ApiResponse.parse(e.response);
+      debugPrint(errorResponse.message);
+      appService.showErrorFromApiRequest(message: errorResponse.message!);
+    }
   }
 
   getAllProducts() async {
@@ -60,6 +92,7 @@ class ShopViewModel extends BaseViewModel {
               costPrice: double.parse(obj['cost_price'].toString())));
           //allProducts.add(Product.fromJson(obj));
         }
+        await getAllCustomers();
         getProductLoading = false;
         rebuildUi();
       }
@@ -81,6 +114,12 @@ class ShopViewModel extends BaseViewModel {
         total = total + double.parse(obj.text);
       }
     }
+  }
+
+  setCreditCustomer(Customer customer) {
+    selectedCustomer = customer.id.toString();
+
+    rebuildUi();
   }
 
   setProduct(Product product, index) {
@@ -186,6 +225,10 @@ class ShopViewModel extends BaseViewModel {
       appService.showErrorFromApiRequest(
           title: "Invalid Entry",
           message: "Please ensure all fileds are filled");
+    } else if (selectedTransactionType == null) {
+      appService.showErrorFromApiRequest(
+          title: "Invalid Entry",
+          message: "Please select transaction type to proceed");
     } else if (productSelection.isEmpty) {
       appService.showErrorFromApiRequest(
           title: "Invalid Entry",
@@ -194,11 +237,17 @@ class ShopViewModel extends BaseViewModel {
       appService.showErrorFromApiRequest(
           title: "Duplicate Entry",
           message: "Please check entries to avoid duplicate product selection");
+    } else if (selectedTransactionType == "Credit" &&
+        selectedCustomer == null) {
+      appService.showErrorFromApiRequest(
+          title: "Customer",
+          message: "Select customer to proceed with credit sales");
     } else {
       Map<String, dynamic> data = {
-        "customer": "${cusName!.text} ${cusPhone!.text}",
+        "customer_id": selectedCustomer,
         "user_id": appService.user!.id,
         "total": total,
+        "type": selectedTransactionType!.toLowerCase(),
         "branch_id": appService.user!.branches![0].id,
         "products": formatProduct()
       };
