@@ -72,6 +72,7 @@ class ProductViewModel extends BaseViewModel {
                   int.parse(obj['branch'][0]['pivot']['quantity'].toString()),
               costPrice: double.parse(obj['cost_price'].toString())));
         }
+
         productsLoading = false;
         rebuildUi();
       }
@@ -92,10 +93,11 @@ class ProductViewModel extends BaseViewModel {
         rebuildUi();
         ApiResponse searchResponse = await productApi.searchProduct({
           "keyword": search!.text,
-          "branch_id": appService.user!.branches![0].id
+          "branch_id": appService.selectedBranch!.id
         });
         if (searchResponse.ok) {
           List<dynamic> data2 = searchResponse.body;
+
           for (var obj2 in data2) {
             products.add(Product(
                 id: obj2['id'],
@@ -107,6 +109,8 @@ class ProductViewModel extends BaseViewModel {
                     obj2['branch'][0]['pivot']['quantity'].toString()),
                 costPrice: double.parse(obj2['cost_price'].toString())));
           }
+          totalPages = 1;
+          currentPage = 1;
           productsLoading = false;
           rebuildUi();
         }
@@ -153,7 +157,7 @@ class ProductViewModel extends BaseViewModel {
         try {
           isLoading = true;
           rebuildUi();
-
+          debugPrint("data : $data");
           ApiResponse response = await productApi.addProduct(data);
           if (response.ok) {
             Map<String, dynamic> data = response.body;
@@ -177,7 +181,8 @@ class ProductViewModel extends BaseViewModel {
                     sellingPrice: double.parse(
                         obj['branch'][0]['pivot']['selling_price'].toString()),
                     location: obj['location'],
-                    quantity: obj['branch'][0]['pivot']['quantity'],
+                    quantity: int.parse(
+                        obj['branch'][0]['pivot']['quantity'].toString()),
                     costPrice: double.parse(obj['cost_price'].toString())));
             isLoading = false;
             rebuildUi();

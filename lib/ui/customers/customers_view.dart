@@ -206,7 +206,8 @@ class CustomerView extends StackedView<CustomerViewModel> {
                                               child: Center(
                                                 child: Text(
                                                   viewModel.customers[index]
-                                                      .location!,
+                                                          .location ??
+                                                      "",
                                                   style: const TextStyle(
                                                       color: AppColors
                                                           .crudTextColor),

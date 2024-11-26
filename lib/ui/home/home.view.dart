@@ -277,11 +277,20 @@ class HomeView extends StackedView<HomeViewModel> {
                                               height: double.infinity,
                                               margin: const EdgeInsets.all(20),
                                               child: BarChart(
-                                                data: viewModel.daySales,
+                                                data: viewModel
+                                                        .daySales.isNotEmpty
+                                                    ? viewModel
+                                                        .daySales.reversed
+                                                        .toList()
+                                                    : [],
                                                 getColor: (a) {
                                                   return AppColors.primaryColor;
                                                 },
-                                                labels: viewModel.days,
+                                                labels: viewModel
+                                                        .days.isNotEmpty
+                                                    ? viewModel.days.reversed
+                                                        .toList()
+                                                    : [],
                                                 labelStyle: const TextStyle(
                                                   fontSize: 11,
                                                 ),

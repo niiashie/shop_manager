@@ -39,8 +39,8 @@ class _PaginationWidgetState extends State<PaginationWidget> {
     final bool isCurrentPage = pageNumber == widget.currentPage;
 
     return Container(
-      width: 35,
-      height: 35,
+      width: 45,
+      height: 45,
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),

@@ -18,8 +18,8 @@ class HomeViewModel extends BaseViewModel {
   bool isLoading = false;
   List<Product> products = [];
   Map<String, double> mapDdata = {};
-  List<String> days = [DateTime.now().toString().substring(0, 10)];
-  List<double> daySales = [0];
+  List<String> days = [];
+  List<double> daySales = [];
   var appService = locator<AppService>();
   Stream<String>? stream;
   StreamSubscription<String>? streamSubscription;
@@ -68,6 +68,8 @@ class HomeViewModel extends BaseViewModel {
         //get sale plotting
         if (data['sale'] is Map<String, dynamic>) {
           Map<String, dynamic> sale = data['sale'];
+          days.clear();
+          daySales.clear();
           for (var ob in sale.keys) {
             List<dynamic> saleItems = sale[ob];
             double total = 0;
@@ -78,8 +80,6 @@ class HomeViewModel extends BaseViewModel {
             mapDdata[ob] = total;
             daySales.add(total);
           }
-          days.removeAt(0);
-          daySales.removeAt(0);
         }
 
         isLoading = false;
