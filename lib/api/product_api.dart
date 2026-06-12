@@ -94,4 +94,13 @@ class ProductApi extends BaseApi {
     var response = await post(url: Api.reverseCreditSale, data: data);
     return ApiResponse.parse(response);
   }
+
+  Future<ApiResponse> getStockHistory(String branchId, String productId,
+      {int page = 1}) async {
+    var response = await get(
+      url: "${Api.getStockHistory}/$branchId/$productId",
+      queryParameters: {"page": page},
+    );
+    return ApiResponse.parse(response);
+  }
 }

@@ -10,7 +10,9 @@ import 'package:shop_manager/ui/branch/branch_view.dart';
 import 'package:shop_manager/ui/customers/customers_view.dart';
 import 'package:shop_manager/ui/dashboard/dashboard.view.model.dart';
 import 'package:shop_manager/ui/home/home.view.dart';
+import 'package:shop_manager/models/product.dart';
 import 'package:shop_manager/ui/products/product.view.dart';
+import 'package:shop_manager/ui/products/product_history/product_history.view.dart';
 import 'package:shop_manager/ui/profit/profit_view.dart';
 import 'package:shop_manager/ui/received_goods/received_goods_view.dart';
 import 'package:shop_manager/ui/requisition/requisition.view.dart';
@@ -338,6 +340,10 @@ class DashBoardView extends StackedView<DashboardViewModel> {
                       break;
                     case '/unpaidTransactions':
                       page = const UnpaidTransactionsView();
+                      break;
+                    case '/productHistory':
+                      page = ProductHistoryView(
+                          product: settings.arguments as Product);
                       break;
                     case '/stocks':
                       page = const StockView();

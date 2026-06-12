@@ -22,6 +22,7 @@ class ShopViewModel extends BaseViewModel {
   List<Product> allProducts = [];
   List<Customer> allCustomers = [];
   List<TextEditingController> productUnitPrices = [];
+  List<TextEditingController> productAvailableQty = [];
   List<TextEditingController> productQuantity = [];
   List<TextEditingController> productAmount = [];
   List<Product> productSelection = [];
@@ -38,6 +39,7 @@ class ShopViewModel extends BaseViewModel {
   addProductRow() {
     productSelection.add(allProducts[0]);
     productUnitPrices.add(TextEditingController(text: ""));
+    productAvailableQty.add(TextEditingController(text: ""));
     productQuantity.add(TextEditingController(text: ""));
     productAmount.add(TextEditingController(text: ""));
 
@@ -147,6 +149,7 @@ class ShopViewModel extends BaseViewModel {
   setProduct(Product product, index) {
     productSelection[index] = product;
     productUnitPrices[index].text = product.sellingPrice.toString();
+    productAvailableQty[index].text = product.quantity.toString();
     productQuantity[index].text = "";
     productAmount[index].text = "";
     computeTotal();
@@ -156,6 +159,7 @@ class ShopViewModel extends BaseViewModel {
   clearProductSelection() {
     productSelection.clear();
     productUnitPrices.clear();
+    productAvailableQty.clear();
     productQuantity.clear();
     productAmount.clear();
     computeTotal();
@@ -163,18 +167,19 @@ class ShopViewModel extends BaseViewModel {
   }
 
   onQuantityChanged(String a, int index) {
-    int productQuantity2 = productSelection[index].quantity!;
-    if (int.parse(a) <= productQuantity2) {
+    int totalStock = productSelection[index].quantity!;
+    if (int.parse(a) <= totalStock) {
       double amount =
           double.parse(a) * double.parse(productUnitPrices[index].text);
       productAmount[index].text = amount.toString();
-
+      productAvailableQty[index].text = (totalStock - int.parse(a)).toString();
       computeTotal();
     } else {
       appService.showErrorFromApiRequest(
           title: "Invalid Input",
-          message: "Available quantity of the product is $productQuantity2");
+          message: "Available quantity of the product is $totalStock");
       productQuantity[index].text = "";
+      productAvailableQty[index].text = totalStock.toString();
     }
     rebuildUi();
   }
@@ -182,6 +187,8 @@ class ShopViewModel extends BaseViewModel {
   resetQuantity(int index) {
     productQuantity[index].text = "";
     productAmount[index].text = "";
+    productAvailableQty[index].text =
+        productSelection[index].quantity.toString();
     computeTotal();
     rebuildUi();
   }
@@ -236,6 +243,7 @@ class ShopViewModel extends BaseViewModel {
   removeProduct(int index) {
     productSelection.removeAt(index);
     productUnitPrices.removeAt(index);
+    productAvailableQty.removeAt(index);
     productQuantity.removeAt(index);
     productAmount.removeAt(index);
     computeTotal();

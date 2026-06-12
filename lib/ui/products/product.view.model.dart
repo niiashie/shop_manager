@@ -9,6 +9,7 @@ import 'package:shop_manager/models/product.dart';
 import 'package:shop_manager/services/app_service.dart';
 import 'package:shop_manager/services/dialog.service.dart';
 import 'package:shop_manager/ui/products/widgets/product_update.view.dart';
+import 'package:shop_manager/utils.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart' as pw;
 
@@ -128,6 +129,11 @@ class ProductViewModel extends BaseViewModel {
   changePage(a) {
     currentPage = a;
     getProducts(a);
+  }
+
+  viewProductHistory(int index) {
+    Utils.sideMenuNavigationKey.currentState
+        ?.pushNamed('/productHistory', arguments: products[index]);
   }
 
   editProduct(index) {

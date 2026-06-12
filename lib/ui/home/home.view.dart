@@ -1,4 +1,4 @@
-import 'package:chart_components/bar_chart_component.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_manager/constants/colors.dart';
 import 'package:shop_manager/constants/fonts.dart';
@@ -277,28 +277,101 @@ class HomeView extends StackedView<HomeViewModel> {
                                               height: double.infinity,
                                               margin: const EdgeInsets.all(20),
                                               child: BarChart(
-                                                data: viewModel
-                                                        .daySales.isNotEmpty
-                                                    ? viewModel
-                                                        .daySales.reversed
-                                                        .toList()
-                                                    : [],
-                                                getColor: (a) {
-                                                  return AppColors.primaryColor;
-                                                },
-                                                labels: viewModel
-                                                        .days.isNotEmpty
-                                                    ? viewModel.days.reversed
-                                                        .toList()
-                                                    : [],
-                                                labelStyle: const TextStyle(
-                                                  fontSize: 11,
-                                                ),
-                                                barWidth: 70,
-                                                barSeparation: 15,
-                                                animationDuration:
+                                                duration:
                                                     const Duration(
                                                         milliseconds: 1800),
+                                                BarChartData(
+                                                  barGroups: viewModel
+                                                          .daySales.isNotEmpty
+                                                      ? viewModel.daySales
+                                                          .reversed
+                                                          .toList()
+                                                          .asMap()
+                                                          .entries
+                                                          .map((e) =>
+                                                              BarChartGroupData(
+                                                                x: e.key,
+                                                                barRods: [
+                                                                  BarChartRodData(
+                                                                    toY:
+                                                                        e.value,
+                                                                    color: AppColors
+                                                                        .primaryColor,
+                                                                    width: 40,
+                                                                    borderRadius: const BorderRadius.vertical(
+                                                                        top: Radius.circular(
+                                                                            4)),
+                                                                  ),
+                                                                ],
+                                                              ))
+                                                          .toList()
+                                                      : [],
+                                                  groupsSpace: 15,
+                                                  titlesData: FlTitlesData(
+                                                    bottomTitles: AxisTitles(
+                                                      sideTitles: SideTitles(
+                                                        showTitles: true,
+                                                        reservedSize: 28,
+                                                        getTitlesWidget:
+                                                            (value, meta) {
+                                                          final labels = viewModel
+                                                                  .days
+                                                                  .isNotEmpty
+                                                              ? viewModel.days
+                                                                  .reversed
+                                                                  .toList()
+                                                              : <String>[];
+                                                          final idx =
+                                                              value.toInt();
+                                                          if (idx >= 0 &&
+                                                              idx <
+                                                                  labels
+                                                                      .length) {
+                                                            return SideTitleWidget(
+                                                              axisSide: meta
+                                                                  .axisSide,
+                                                              child: Text(
+                                                                  labels[idx],
+                                                                  style: const TextStyle(
+                                                                      fontSize:
+                                                                          11)),
+                                                            );
+                                                          }
+                                                          return const SizedBox
+                                                              .shrink();
+                                                        },
+                                                      ),
+                                                    ),
+                                                    topTitles: const AxisTitles(
+                                                        sideTitles: SideTitles(
+                                                            showTitles: false)),
+                                                    rightTitles:
+                                                        const AxisTitles(
+                                                            sideTitles:
+                                                                SideTitles(
+                                                                    showTitles:
+                                                                        false)),
+                                                    leftTitles: AxisTitles(
+                                                      sideTitles: SideTitles(
+                                                        showTitles: true,
+                                                        reservedSize: 40,
+                                                        getTitlesWidget:
+                                                            (value, meta) =>
+                                                                Text(
+                                                          value
+                                                              .toStringAsFixed(
+                                                                  0),
+                                                          style: const TextStyle(
+                                                              fontSize: 11),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  borderData:
+                                                      FlBorderData(show: false),
+                                                  gridData: const FlGridData(
+                                                      show: true),
+                                                ),
                                               ),
                                             ),
                                             const Align(
@@ -314,7 +387,250 @@ class HomeView extends StackedView<HomeViewModel> {
                                 )
                               ],
                             ),
-                          )
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Top Selling Products
+                              Expanded(
+                                child: Material(
+                                  elevation: 2,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(10),
+                                    height: 400,
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          height: double.infinity,
+                                          margin: const EdgeInsets.only(
+                                              left: 20,
+                                              right: 20,
+                                              top: 20,
+                                              bottom: 30),
+                                          child: BarChart(
+                                            duration: const Duration(
+                                                milliseconds: 1800),
+                                            BarChartData(
+                                              barGroups: viewModel
+                                                      .topProductUnits
+                                                      .isNotEmpty
+                                                  ? viewModel.topProductUnits
+                                                      .asMap()
+                                                      .entries
+                                                      .map((e) =>
+                                                          BarChartGroupData(
+                                                            x: e.key,
+                                                            barRods: [
+                                                              BarChartRodData(
+                                                                toY: e.value,
+                                                                color: AppColors
+                                                                    .primaryColor,
+                                                                width: 40,
+                                                                borderRadius: const BorderRadius
+                                                                    .vertical(
+                                                                    top: Radius
+                                                                        .circular(
+                                                                            4)),
+                                                              ),
+                                                            ],
+                                                          ))
+                                                      .toList()
+                                                  : [],
+                                              groupsSpace: 15,
+                                              titlesData: FlTitlesData(
+                                                bottomTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                    showTitles: true,
+                                                    reservedSize: 36,
+                                                    getTitlesWidget:
+                                                        (value, meta) {
+                                                      final idx =
+                                                          value.toInt();
+                                                      if (idx >= 0 &&
+                                                          idx <
+                                                              viewModel
+                                                                  .topProductNames
+                                                                  .length) {
+                                                        return SideTitleWidget(
+                                                          axisSide:
+                                                              meta.axisSide,
+                                                          child: Text(
+                                                            viewModel
+                                                                .topProductNames[
+                                                                    idx],
+                                                            style: const TextStyle(
+                                                                fontSize: 10),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        );
+                                                      }
+                                                      return const SizedBox
+                                                          .shrink();
+                                                    },
+                                                  ),
+                                                ),
+                                                topTitles: const AxisTitles(
+                                                    sideTitles: SideTitles(
+                                                        showTitles: false)),
+                                                rightTitles: const AxisTitles(
+                                                    sideTitles: SideTitles(
+                                                        showTitles: false)),
+                                                leftTitles: AxisTitles(
+                                                  sideTitles: SideTitles(
+                                                    showTitles: true,
+                                                    reservedSize: 40,
+                                                    getTitlesWidget:
+                                                        (value, meta) => Text(
+                                                      value.toStringAsFixed(0),
+                                                      style: const TextStyle(
+                                                          fontSize: 11),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              borderData:
+                                                  FlBorderData(show: false),
+                                              gridData: const FlGridData(
+                                                  show: true),
+                                            ),
+                                          ),
+                                        ),
+                                        const Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(
+                                            "Top Selling Products",
+                                            style: TextStyle(fontSize: 13),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 15),
+                              // Cash vs Credit Donut
+                              SizedBox(
+                                width: 400,
+                                child: Material(
+                                  elevation: 2,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    height: 400,
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Stack(
+                                      children: [
+                                        const Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 10, top: 8),
+                                            child: Text(
+                                              "Sales by Type",
+                                              style: TextStyle(fontSize: 13),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 30, bottom: 40),
+                                          child: PieChart(
+                                            PieChartData(
+                                              centerSpaceRadius: 60,
+                                              sectionsSpace: 3,
+                                              sections: [
+                                                PieChartSectionData(
+                                                  value: viewModel.cashCount
+                                                      .toDouble(),
+                                                  color: AppColors.arrowUpColor,
+                                                  title:
+                                                      '${viewModel.cashCount}',
+                                                  radius: 80,
+                                                  titleStyle: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                                PieChartSectionData(
+                                                  value: viewModel.creditCount
+                                                      .toDouble(),
+                                                  color:
+                                                      AppColors.soldAssetsColor,
+                                                  title:
+                                                      '${viewModel.creditCount}',
+                                                  radius: 80,
+                                                  titleStyle: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 12),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                    width: 12,
+                                                    height: 12,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            color: AppColors
+                                                                .arrowUpColor,
+                                                            shape:
+                                                                BoxShape.circle)),
+                                                const SizedBox(width: 6),
+                                                const Text("Cash",
+                                                    style:
+                                                        TextStyle(fontSize: 12)),
+                                                const SizedBox(width: 20),
+                                                Container(
+                                                    width: 12,
+                                                    height: 12,
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                            color: AppColors
+                                                                .soldAssetsColor,
+                                                            shape:
+                                                                BoxShape.circle)),
+                                                const SizedBox(width: 6),
+                                                const Text("Credit",
+                                                    style:
+                                                        TextStyle(fontSize: 12)),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                       child: const SizedBox(

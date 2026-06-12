@@ -244,6 +244,23 @@ class ShopView extends StackedView<ShopViewModel> {
                                 ),
                                 Expanded(
                                   child: CustomFormField(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    controller:
+                                        viewModel.productAvailableQty[index2],
+                                    readOnly: true,
+                                    labelText: "Avail. Qty",
+                                    prefixIcon: const Icon(
+                                      Icons.inventory_2_outlined,
+                                      size: 12,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                Expanded(
+                                  child: CustomFormField(
                                       fillColor: Colors.white,
                                       filled: true,
                                       controller:
@@ -651,38 +668,6 @@ class ShopView extends StackedView<ShopViewModel> {
                     const SizedBox(
                       height: 15,
                     ),
-
-                    // Container(
-                    //   width: double.infinity,
-                    //   padding: const EdgeInsets.only(top: 2, bottom: 2),
-                    //   margin: const EdgeInsets.only(left: 20, right: 20),
-                    //   child: Row(
-                    //     mainAxisSize: MainAxisSize.max,
-                    //     children: [
-                    //       Expanded(
-                    //         child: CustomFormField(
-                    //           fillColor: Colors.white,
-                    //           filled: true,
-                    //           controller: viewModel.cusName,
-                    //           labelText: "Customer Name",
-                    //           hintText: "Enter customer name",
-                    //         ),
-                    //       ),
-                    //       const SizedBox(
-                    //         width: 15,
-                    //       ),
-                    //       Expanded(
-                    //         child: CustomFormField(
-                    //           fillColor: Colors.white,
-                    //           filled: true,
-                    //           controller: viewModel.cusPhone,
-                    //           labelText: "Customer Phone",
-                    //           hintText: "Enter customer phone",
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                     const SizedBox(
                       height: 15,
                     ),

@@ -20,6 +20,10 @@ class HomeViewModel extends BaseViewModel {
   Map<String, double> mapDdata = {};
   List<String> days = [];
   List<double> daySales = [];
+  List<String> topProductNames = [];
+  List<double> topProductUnits = [];
+  int cashCount = 0;
+  int creditCount = 0;
   var appService = locator<AppService>();
   Stream<String>? stream;
   StreamSubscription<String>? streamSubscription;
@@ -37,6 +41,8 @@ class HomeViewModel extends BaseViewModel {
   }
 
   getDashboardValues() async {
+    cashCount = 0;
+    creditCount = 0;
     try {
       isLoading = true;
       rebuildUi();
@@ -48,7 +54,8 @@ class HomeViewModel extends BaseViewModel {
       if (response.ok) {
         Map<String, dynamic> data = response.body;
         registeredProducts = data['products'].toString();
-        productsValue = data['products_value'].toString();
+        productsValue =
+            double.parse(data['products_value'].toString()).toStringAsFixed(2);
         salesToday = data['sales_today'].toString();
         unpaidSales = data['unpaid_sales'].toString();
         List<dynamic> p = data['acsending'];
@@ -76,10 +83,24 @@ class HomeViewModel extends BaseViewModel {
             days.add(ob);
             for (var o in saleItems) {
               total = total + double.parse(o['total'].toString());
+              if (o['type'] == 'cash') {
+                cashCount++;
+              } else if (o['type'] == 'credit') {
+                creditCount++;
+              }
             }
             mapDdata[ob] = total;
             daySales.add(total);
           }
+        }
+
+        topProductNames.clear();
+        topProductUnits.clear();
+        List<dynamic> topP = data['top_products'] ?? [];
+        for (var obj in topP) {
+          topProductNames.add(obj['product']['name']);
+          topProductUnits
+              .add(double.parse(obj['total_units'].toString()));
         }
 
         isLoading = false;

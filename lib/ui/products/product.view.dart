@@ -351,37 +351,87 @@ class ProductView extends StackedView<ProductViewModel> {
                                               ),
                                               Expanded(
                                                 child: Center(
-                                                    child: Material(
-                                                  elevation: 2,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(5)),
-                                                  child: InkWell(
-                                                    child: Container(
-                                                      width: 30,
-                                                      height: 30,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: AppColors
-                                                            .primaryColor,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5)),
-                                                      ),
-                                                      child: const Center(
-                                                        child: Icon(
-                                                          Icons.edit,
-                                                          size: 12,
-                                                          color: Colors.white,
+                                                    child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Material(
+                                                      elevation: 2,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                              Radius.circular(
+                                                                  5)),
+                                                      child: InkWell(
+                                                        child: Container(
+                                                          width: 30,
+                                                          height: 30,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            5)),
+                                                          ),
+                                                          child: const Center(
+                                                            child: Icon(
+                                                              Icons.edit,
+                                                              size: 12,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
                                                         ),
+                                                        onTap: () {
+                                                          viewModel.editProduct(
+                                                              index);
+                                                        },
                                                       ),
                                                     ),
-                                                    onTap: () {
-                                                      viewModel
-                                                          .editProduct(index);
-                                                    },
-                                                  ),
+                                                    SizedBox(width: 10),
+                                                    Material(
+                                                      elevation: 2,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                              Radius.circular(
+                                                                  5)),
+                                                      child: InkWell(
+                                                        child: Container(
+                                                          width: 30,
+                                                          height: 30,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: AppColors
+                                                                .primaryColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            5)),
+                                                          ),
+                                                          child: const Center(
+                                                            child: Icon(
+                                                              Icons.history,
+                                                              size: 12,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        onTap: () {
+                                                          viewModel
+                                                              .viewProductHistory(
+                                                                  index);
+                                                        },
+                                                      ),
+                                                    )
+                                                  ],
                                                 )),
                                               )
                                             ],
